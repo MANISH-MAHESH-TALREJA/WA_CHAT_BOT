@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:tag="layout/activity_privacy_policy_0">
+
+    <WebView
+        android:id="@+id/policyWebView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingBottom="40dp" />
+
+    <TextView
+        android:id="@+id/btnAccept"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/actionBarColor"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Accept Terms and Condition"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+</RelativeLayout>
+    </layout>

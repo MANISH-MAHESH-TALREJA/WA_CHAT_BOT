@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linearUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/ic_shap"
+        android:orientation="horizontal"
+        android:paddingRight="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtAutoReply"
+                style="@style/normalText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:paddingStart="20dp"
+                android:text="Incoming Message :" />
+
+            <TextView
+                android:id="@+id/txtIncomingMessage"
+                style="@style/headerText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:paddingStart="20dp"
+                android:text="hello" />
+
+
+            <TextView
+                style="@style/normalText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="3dp"
+                android:paddingStart="20dp"
+                android:text="Reply Message :" />
+
+            <TextView
+                android:id="@+id/txtReplyMessage"
+                style="@style/headerText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="hello" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:id="@+id/imgEdit"
+                android:layout_width="35sp"
+                android:layout_height="35sp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/pencil" />
+
+            <ImageView
+                android:id="@+id/imgDelete"
+                android:layout_width="35sp"
+                android:layout_height="35sp"
+                android:background="@drawable/ic_delete" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>

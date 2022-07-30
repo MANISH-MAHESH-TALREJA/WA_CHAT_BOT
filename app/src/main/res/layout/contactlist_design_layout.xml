@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="7dp">
+
+            <TextView
+                android:id="@+id/txtFirstLater"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="20sp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/circle_background"
+                android:fontFamily="@font/outfit_bold"
+                android:gravity="center"
+                android:text="H"
+                android:textColor="@color/actionBarColor"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtConctName"
+                style="@style/semibold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="1234567890"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/imgConctClose"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="right"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/outfit_bold"
+                android:padding="18dp"
+                android:text="Remove"
+                android:textColor="@color/text_red"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>
