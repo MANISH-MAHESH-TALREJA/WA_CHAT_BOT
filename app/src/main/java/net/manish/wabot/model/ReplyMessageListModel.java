@@ -1,47 +1,57 @@
 package net.manish.wabot.model;
 
-public class ReplyMessageListModel {
+public class ReplyMessageListModel
+{
     private String date;
     private String name;
     private String sameDate;
     private String time;
 
-    public ReplyMessageListModel(String str, String str2, String str3, String str4) {
+    public ReplyMessageListModel(String str, String str2, String str3, String str4)
+    {
         this.name = str;
         this.date = str2;
         this.time = str3;
         this.sameDate = str4;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return this.name;
     }
 
-    public void setName(String str) {
+    public void setName(String str)
+    {
         this.name = str;
     }
 
-    public String getTime() {
+    public String getTime()
+    {
         return this.time;
     }
 
-    public void setTime(String str) {
+    public void setTime(String str)
+    {
         this.time = str;
     }
 
-    public String getDate() {
+    public String getDate()
+    {
         return this.date;
     }
 
-    public void setDate(String str) {
+    public void setDate(String str)
+    {
         this.date = str;
     }
 
-    public String getSameDate() {
+    public String getSameDate()
+    {
         return this.sameDate;
     }
 
-    public void setSameDate(String str) {
+    public void setSameDate(String str)
+    {
         this.sameDate = str;
     }
 }

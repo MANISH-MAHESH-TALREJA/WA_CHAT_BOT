@@ -26,49 +26,49 @@ public class ReplyHeaderActivity extends AppCompatActivity implements View.OnCli
     public SharedPreference preference;
 
     public String replyMsg;
-    ActivityReplyHeaderBinding thisb;
+    ActivityReplyHeaderBinding myThis;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        thisb = (ActivityReplyHeaderBinding) DataBindingUtil.setContentView(this, R.layout.activity_reply_header);
+        myThis = (ActivityReplyHeaderBinding) DataBindingUtil.setContentView(this, R.layout.activity_reply_header);
         preference = new SharedPreference(this);
         if (preference.getFromPref_String("ReplyHeader").equals("")) {
-            thisb.switchReplyHeader.setChecked(true);
+            myThis.switchReplyHeader.setChecked(true);
         }
         replyMsg = preference.getFromPref_String("autoReplyText");
         headerMsg = preference.getFromPref_String("HeaderText");
 
         if (headerMsg.isEmpty()) {
             headerMsg = NotificationService.TAG;
-            thisb.txtHeaderText.setText(NotificationService.TAG);
-            thisb.txtReplyMessage.setText(Html.fromHtml("<b>" + headerMsg + "</b><br>" + replyMsg));
+            myThis.txtHeaderText.setText(NotificationService.TAG);
+            myThis.txtReplyMessage.setText(Html.fromHtml("<b>" + headerMsg + "</b><br>" + replyMsg));
         } else {
-            thisb.txtHeaderText.setText(preference.getFromPref_String("HeaderText"));
-            thisb.txtReplyMessage.setText(Html.fromHtml("<b>" + headerMsg + "</b><br>" + replyMsg));
+            myThis.txtHeaderText.setText(preference.getFromPref_String("HeaderText"));
+            myThis.txtReplyMessage.setText(Html.fromHtml("<b>" + headerMsg + "</b><br>" + replyMsg));
         }
         headerSwitch();
         Log.e("Header Switch", preference.getFromPref_String("ReplyHeader") + ":::");
-        thisb.linearHeaderMessage.setOnClickListener(this);
-        thisb.editHeader.setOnClickListener(this);
-        thisb.imgHeaderBack.setOnClickListener(this);
+        myThis.linearHeaderMessage.setOnClickListener(this);
+        myThis.editHeader.setOnClickListener(this);
+        myThis.imgHeaderBack.setOnClickListener(this);
     }
 
     private void headerSwitch() {
-        thisb.switchReplyHeader.setText(Html.fromHtml("<font color='black'>Enable</font><br><font color='#808080'>send the reply header along with the reply message</font>"));
-        thisb.switchReplyHeader.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        myThis.switchReplyHeader.setText(Html.fromHtml("<font color='black'>Enable</font><br><font color='#808080'>send the reply header along with the reply message</font>"));
+        myThis.switchReplyHeader.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     preference.addToPref_String("ReplyHeader", "Checked");
-                    thisb.txtReplyMessage.setText(Html.fromHtml("<b>" + headerMsg + "</b><br>" + replyMsg));
-                    thisb.txtBoldText.setText(headerMsg);
-                    thisb.txtBoldText.setTypeface((Typeface) null, Typeface.BOLD);
-                    preference.addToPref_String("BoldHeaderText", thisb.txtBoldText.getText().toString());
+                    myThis.txtReplyMessage.setText(Html.fromHtml("<b>" + headerMsg + "</b><br>" + replyMsg));
+                    myThis.txtBoldText.setText(headerMsg);
+                    myThis.txtBoldText.setTypeface((Typeface) null, Typeface.BOLD);
+                    preference.addToPref_String("BoldHeaderText", myThis.txtBoldText.getText().toString());
                     return;
                 }
                 preference.addToPref_String("ReplyHeader", "Unchecked");
-                thisb.txtReplyMessage.setText(replyMsg);
+                myThis.txtReplyMessage.setText(replyMsg);
                 preference.addToPref_String("BoldHeaderText", " ");
             }
         });
@@ -79,14 +79,14 @@ public class ReplyHeaderActivity extends AppCompatActivity implements View.OnCli
     public void onResume() {
         super.onResume();
         if (preference.getFromPref_String("ReplyHeader").equals("Checked")) {
-            thisb.switchReplyHeader.setChecked(true);
-            thisb.txtReplyMessage.setText(Html.fromHtml("<b>" + headerMsg + "</b><br>" + replyMsg));
-            thisb.txtBoldText.setText(headerMsg);
-            thisb.txtBoldText.setTypeface((Typeface) null, Typeface.BOLD);
-            preference.addToPref_String("BoldHeaderText", thisb.txtBoldText.getText().toString());
+            myThis.switchReplyHeader.setChecked(true);
+            myThis.txtReplyMessage.setText(Html.fromHtml("<b>" + headerMsg + "</b><br>" + replyMsg));
+            myThis.txtBoldText.setText(headerMsg);
+            myThis.txtBoldText.setTypeface((Typeface) null, Typeface.BOLD);
+            preference.addToPref_String("BoldHeaderText", myThis.txtBoldText.getText().toString());
         } else if (preference.getFromPref_String("ReplyHeader").equals("Unchecked")) {
-            thisb.switchReplyHeader.setChecked(false);
-            thisb.txtReplyMessage.setText(replyMsg);
+            myThis.switchReplyHeader.setChecked(false);
+            myThis.txtReplyMessage.setText(replyMsg);
             preference.addToPref_String("BoldHeaderText", " ");
         }
     }
@@ -103,7 +103,7 @@ public class ReplyHeaderActivity extends AppCompatActivity implements View.OnCli
             View inflate = getLayoutInflater().inflate(R.layout.reply_header_dialog_layout, (ViewGroup) null);
             builder.setView(inflate);
             final EditText editText = (EditText) inflate.findViewById(R.id.edReplyHeaderMsg);
-            editText.setText(thisb.txtHeaderText.getText().toString());
+            editText.setText(myThis.txtHeaderText.getText().toString());
             editText.setSelection(editText.getText().length());
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -114,14 +114,14 @@ public class ReplyHeaderActivity extends AppCompatActivity implements View.OnCli
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    thisb.txtHeaderText.setText(editText.getText().toString().toString().trim());
-                    headerMsg = editText.getText().toString().toString().trim();
-                    thisb.txtReplyMessage.setText(Html.fromHtml("<b>" + headerMsg + "</b><br>" + replyMsg));
-                    preference.addToPref_String("HeaderText", editText.getText().toString().toString().trim());
+                    myThis.txtHeaderText.setText(editText.getText().toString().trim());
+                    headerMsg = editText.getText().toString().trim();
+                    myThis.txtReplyMessage.setText(Html.fromHtml("<b>" + headerMsg + "</b><br>" + replyMsg));
+                    preference.addToPref_String("HeaderText", editText.getText().toString().trim());
                     if (preference.getFromPref_String("ReplyHeader").equals("Checked")) {
-                        thisb.txtBoldText.setText(headerMsg);
-                        thisb.txtBoldText.setTypeface((Typeface) null, Typeface.BOLD);
-                        preference.addToPref_String("BoldHeaderText", thisb.txtBoldText.getText().toString());
+                        myThis.txtBoldText.setText(headerMsg);
+                        myThis.txtBoldText.setTypeface((Typeface) null, Typeface.BOLD);
+                        preference.addToPref_String("BoldHeaderText", myThis.txtBoldText.getText().toString());
                     } else {
                         preference.addToPref_String("BoldHeaderText", " ");
                     }
@@ -136,7 +136,7 @@ public class ReplyHeaderActivity extends AppCompatActivity implements View.OnCli
             View inflate = getLayoutInflater().inflate(R.layout.reply_header_dialog_layout, (ViewGroup) null);
             builder.setView(inflate);
             final EditText editText = (EditText) inflate.findViewById(R.id.edReplyHeaderMsg);
-            editText.setText(thisb.txtHeaderText.getText().toString());
+            editText.setText(myThis.txtHeaderText.getText().toString());
             editText.setSelection(editText.getText().length());
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -147,14 +147,14 @@ public class ReplyHeaderActivity extends AppCompatActivity implements View.OnCli
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    thisb.txtHeaderText.setText(editText.getText().toString().toString().trim());
-                    headerMsg = editText.getText().toString().toString().trim();
-                    thisb.txtReplyMessage.setText(Html.fromHtml("<b>" + headerMsg + "</b><br>" + replyMsg));
-                    preference.addToPref_String("HeaderText", editText.getText().toString().toString().trim());
+                    myThis.txtHeaderText.setText(editText.getText().toString().trim());
+                    headerMsg = editText.getText().toString().trim();
+                    myThis.txtReplyMessage.setText(Html.fromHtml("<b>" + headerMsg + "</b><br>" + replyMsg));
+                    preference.addToPref_String("HeaderText", editText.getText().toString().trim());
                     if (preference.getFromPref_String("ReplyHeader").equals("Checked")) {
-                        thisb.txtBoldText.setText(headerMsg);
-                        thisb.txtBoldText.setTypeface((Typeface) null, Typeface.BOLD);
-                        preference.addToPref_String("BoldHeaderText", thisb.txtBoldText.getText().toString());
+                        myThis.txtBoldText.setText(headerMsg);
+                        myThis.txtBoldText.setTypeface((Typeface) null, Typeface.BOLD);
+                        preference.addToPref_String("BoldHeaderText", myThis.txtBoldText.getText().toString());
                     } else {
                         preference.addToPref_String("BoldHeaderText", " ");
                     }

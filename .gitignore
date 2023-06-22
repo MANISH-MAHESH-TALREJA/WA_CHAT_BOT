@@ -12,4 +12,8 @@
 /captures
 .externalNativeBuild
 .cxx
+.idea/
+app/release/
 local.properties
+/.idea/
+.idea/misc.xml

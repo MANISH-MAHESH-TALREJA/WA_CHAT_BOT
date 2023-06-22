@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,13 +52,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private List<String> autoPrefList;
     private List<String> autoText;
     private Context context;
-    
-    //public UnifiedNativeAd nativeAd;
-    private List<String> prefList;
-    
+
     public SharedPreference preference;
-    private String selectAutoText = null;
-    FragmentHomeBinding thisb;
+    private final String selectAutoText = null;
+    FragmentHomeBinding myThis;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -64,15 +63,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+    public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         FragmentHomeBinding inflate = FragmentHomeBinding.inflate(layoutInflater, viewGroup, false);
-        thisb = inflate;
+        myThis = inflate;
 
         return inflate.getRoot();
     }
 
     @Override
-    public void onViewCreated(View view, Bundle bundle) {
+    public void onViewCreated(@NonNull View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
         context = getActivity();
         preference = new SharedPreference(getActivity());
@@ -80,7 +79,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         Const.autoText = new ArrayList();
         autoText = new ArrayList();
         autoPrefList = new ArrayList();
-        prefList = new ArrayList();
+        //public UnifiedNativeAd nativeAd;
+        List<String> prefList = new ArrayList();
         autoText = preference.getAutoTextList("AutoText");
         preference.addToPref_Boolean("autoReplyTextSwitch", true);
         try {
@@ -91,12 +91,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             autoText = new ArrayList();
             Log.e("Auto Text ", e.getMessage());
         }
-        thisb.msgSwitch.setChecked(preference.getFromPref_Boolean("CheckedState"));
-        thisb.WASwitch.setChecked(preference.getFromPref_Boolean("WAState"));
-        thisb.WBSwitch.setChecked(preference.getFromPref_Boolean("WBState"));
-        thisb.msgSwitch.setChecked(preference.getFromPref_Boolean("CheckedState"));
+        myThis.msgSwitch.setChecked(preference.getFromPref_Boolean("CheckedState"));
+        myThis.WASwitch.setChecked(preference.getFromPref_Boolean("WAState"));
+        myThis.WBSwitch.setChecked(preference.getFromPref_Boolean("WBState"));
+        myThis.msgSwitch.setChecked(preference.getFromPref_Boolean("CheckedState"));
         Log.e("msgSwitch Value", preference.getFromPref_Boolean("CheckedState") + ":::");
-        thisb.msgSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        myThis.msgSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (!b) {
@@ -128,7 +128,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.dismiss();
-                            thisb.msgSwitch.setChecked(false);
+                            myThis.msgSwitch.setChecked(false);
                             preference.addToPref_Boolean("CheckedState", false);
                         }
                     });
@@ -139,7 +139,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
 
         boolean whatsappFound = isAppInstalled(context, "com.whatsapp");
-        thisb.whatsClick.setOnClickListener(new View.OnClickListener() {
+        myThis.whatsClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!whatsappFound){
@@ -149,12 +149,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
 
         if(!whatsappFound){
-            thisb.WASwitch.setClickable(false);
+            myThis.WASwitch.setClickable(false);
         }
         else{
-            thisb.WASwitch.setClickable(true);
+            myThis.WASwitch.setClickable(true);
         }
-        thisb.WASwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        myThis.WASwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
@@ -169,7 +169,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         boolean whatsappFound1 = isAppInstalled(context, "com.whatsapp.w4b");
 
 
-        thisb.busiClick.setOnClickListener(new View.OnClickListener() {
+        myThis.busiClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!whatsappFound1){
@@ -179,12 +179,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
 
         if(!whatsappFound1){
-            thisb.WBSwitch.setClickable(false);
+            myThis.WBSwitch.setClickable(false);
         }
         else{
-            thisb.WBSwitch.setClickable(true);
+            myThis.WBSwitch.setClickable(true);
         }
-        thisb.WBSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        myThis.WBSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (!b) {
@@ -195,12 +195,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
         if (!preference.getFromPref_String("autoReplyText").equals("")) {
-            thisb.txtAutoReply.setText(preference.getFromPref_String("autoReplyText"));
+            myThis.txtAutoReply.setText(preference.getFromPref_String("autoReplyText"));
         } else {
-            thisb.txtAutoReply.setText("Can't talk now.");
+            myThis.txtAutoReply.setText("Can't talk now.");
             preference.addToPref_String("autoReplyText", "Can't talk now.");
         }
-        thisb.autoReplyTextSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        myThis.autoReplyTextSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
@@ -209,16 +209,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 } else if (!preference.getFromPref_Boolean("CheckedState")) {
                     Toast.makeText(getActivity(), "Please On Auto Reply", Toast.LENGTH_SHORT).show();
                     Log.e("Auto REply", "Text");
-                    thisb.autoReplyTextSwitch.setChecked(false);
+                    myThis.autoReplyTextSwitch.setChecked(false);
                 } else {
 
                 }
             }
         });
         //TMAdsUtils.initAd(getContext());
-        //TMAdsUtils.loadNativeAd(getContext(), thisb.myTemplate);
-        thisb.imgEdit.setOnClickListener(this);
-        thisb.imgMsgClear.setOnClickListener(this);
+        //TMAdsUtils.loadNativeAd(getContext(), myThis.myTemplate);
+        myThis.imgEdit.setOnClickListener(this);
+        myThis.imgMsgClear.setOnClickListener(this);
         AutoReplyText();
         autoPrefList.addAll(autoText);
         /*if (isAdded()) {
@@ -242,12 +242,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
     private void AutoReplyText() {
-        Const.autoText.add("In a meeting,text you later.");
+        Const.autoText.add("In a meeting, text you later.");
         Const.autoText.add("At work, text you later.");
         Const.autoText.add("At the movie, text you later.");
         Const.autoText.add("I am busy, talk to you later.");
         Const.autoText.add("I am driving, text you later.");
-        Const.autoText.add("I am sleeping,text you later.");
+        Const.autoText.add("I am sleeping, text you later.");
         Const.autoText.add("Can't talk now.");
         autoPrefList.addAll(Const.autoText);
     }
@@ -283,19 +283,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         if (preference.getFromPref_Boolean("autoReplyTextSwitch")) {
-            thisb.autoReplyTextSwitch.setChecked(true);
+            myThis.autoReplyTextSwitch.setChecked(true);
             SharedPreference sharedPreference = preference;
             sharedPreference.addToPref_String("autoReplyText", sharedPreference.getFromPref_String("autoReplyText"));
         } else {
-            thisb.autoReplyTextSwitch.setChecked(false);
+            myThis.autoReplyTextSwitch.setChecked(false);
         }
         Log.e("autoReplyTextSwitch", preference.getFromPref_Boolean("autoReplyTextSwitch") + ":::");
         adapter = new AutoReplyTextAdapter(getActivity(), autoPrefList);
-        thisb.autoRecycleview.setAdapter(adapter);
+        myThis.autoRecycleview.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
-        thisb.autoRecycleview.setLayoutManager(linearLayoutManager);
+        myThis.autoRecycleview.setLayoutManager(linearLayoutManager);
     }
 
     public void onStart() {
@@ -309,12 +309,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             dialog.setContentView(R.layout.add_auto_reply_text_layout);
             dialog.getWindow().setLayout(-1, -2);
             EditText editText = (EditText) dialog.findViewById(R.id.edAutoReplyText);
-            editText.setText(thisb.txtAutoReply.getText().toString().toString().trim());
+            editText.setText(myThis.txtAutoReply.getText().toString().trim());
             editText.setSelection(editText.getText().length());
             ((ImageView) dialog.findViewById(R.id.imgClose)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!editText.getText().toString().toString().trim().isEmpty()) {
+                    if (!editText.getText().toString().trim().isEmpty()) {
                         editText.getText().clear();
                     }
                 }
@@ -322,12 +322,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             ((TextView) dialog.findViewById(R.id.btnSetMsg)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (editText.getText().toString().toString().trim().isEmpty()) {
+                    if (editText.getText().toString().trim().isEmpty()) {
                         editText.requestFocus();
                         editText.setError("Please Write a text");
                         return;
                     }
-                    thisb.txtAutoReply.setText(editText.getText().toString().toString().trim());
+                    myThis.txtAutoReply.setText(editText.getText().toString().trim());
                     preference.addToPref_String("autoReplyText", editText.getText().toString());
                     autoText.add(editText.getText().toString());
                     preference.setAutoTextList("AutoText", autoText);
@@ -394,14 +394,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     class AutoReplyTextAdapter extends RecyclerView.Adapter<AutoReplyTextAdapter.ViewHolder> {
-        private Context context;
-        private List<String> listItem;
+        private final List<String> listItem;
 
         public AutoReplyTextAdapter(Context context2, List<String> list) {
-            context = context2;
             listItem = list;
         }
 
+        @NonNull
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.auto_reply_text_design_layout, viewGroup, false));
@@ -413,7 +412,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             viewHolder.linearAutoText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    thisb.txtAutoReply.setText(listItem.get(i));
+                    myThis.txtAutoReply.setText(listItem.get(i));
                     preference.addToPref_String("autoReplyText", listItem.get(i));
                 }
             });

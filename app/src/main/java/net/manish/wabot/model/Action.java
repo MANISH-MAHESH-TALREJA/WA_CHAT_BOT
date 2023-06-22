@@ -7,19 +7,26 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
+
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
+
 import net.manish.wabot.NotificationService;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Action implements Parcelable {
-    public static final Creator CREATOR = new Creator() {
-        public Action createFromParcel(Parcel parcel) {
+public class Action implements Parcelable
+{
+    public static final Creator CREATOR = new Creator()
+    {
+        public Action createFromParcel(Parcel parcel)
+        {
             return new Action(parcel);
         }
 
-        public Action[] newArray(int i) {
+        public Action[] newArray(int i)
+        {
             return new Action[i];
         }
     };
@@ -29,11 +36,13 @@ public class Action implements Parcelable {
     private final ArrayList<RemoteInputParcel> remoteInputs;
     private final String text;
 
-    public int describeContents() {
+    public int describeContents()
+    {
         return 0;
     }
 
-    public Action(Parcel parcel) {
+    public Action(Parcel parcel)
+    {
         ArrayList<RemoteInputParcel> arrayList = new ArrayList<>();
         remoteInputs = arrayList;
         text = parcel.readString();
@@ -43,7 +52,8 @@ public class Action implements Parcelable {
         parcel.readTypedList(arrayList, RemoteInputParcel.CREATOR);
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(Parcel parcel, int i)
+    {
         parcel.writeString(text);
         parcel.writeString(packageName);
         parcel.writeParcelable(p, i);
@@ -51,7 +61,8 @@ public class Action implements Parcelable {
         parcel.writeTypedList(remoteInputs);
     }
 
-    public Action(String str, String str2, PendingIntent pendingIntent, RemoteInput remoteInput, boolean z) {
+    public Action(String str, String str2, PendingIntent pendingIntent, RemoteInput remoteInput, boolean z)
+    {
         ArrayList<RemoteInputParcel> arrayList = new ArrayList<>();
         remoteInputs = arrayList;
         text = str;
@@ -61,26 +72,31 @@ public class Action implements Parcelable {
         arrayList.add(new RemoteInputParcel(remoteInput));
     }
 
-    public Action(NotificationCompat.Action action, String str, boolean z) {
+    public Action(NotificationCompat.Action action, String str, boolean z)
+    {
         remoteInputs = new ArrayList<>();
         text = action.title.toString();
         packageName = str;
         p = action.actionIntent;
-        if (action.getRemoteInputs() != null) {
-            for (RemoteInput remoteInputParcel : action.getRemoteInputs()) {
+        if (action.getRemoteInputs() != null)
+        {
+            for (RemoteInput remoteInputParcel : action.getRemoteInputs())
+            {
                 remoteInputs.add(new RemoteInputParcel(remoteInputParcel));
             }
         }
         isQuickReply = z;
     }
 
-    public void sendReply(Context context, String str) throws PendingIntent.CanceledException {
+    public void sendReply(Context context, String str) throws PendingIntent.CanceledException
+    {
         Log.e("AutoReply", "inside sendReply");
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         ArrayList arrayList = new ArrayList();
         Iterator<RemoteInputParcel> it = remoteInputs.iterator();
-        while (it.hasNext()) {
+        while (it.hasNext())
+        {
             RemoteInputParcel next = it.next();
             Log.e("", "RemoteInput: " + next.getLabel());
             bundle.putCharSequence(next.getResultKey(), str);
@@ -96,26 +112,32 @@ public class Action implements Parcelable {
         context.stopService(new Intent(context, NotificationService.class));
     }
 
-    public ArrayList<RemoteInputParcel> getRemoteInputs() {
+    public ArrayList<RemoteInputParcel> getRemoteInputs()
+    {
         return remoteInputs;
     }
 
-    public boolean isQuickReply() {
+    public boolean isQuickReply()
+    {
         return isQuickReply;
     }
 
-    public String getText() {
+    public String getText()
+    {
         return text;
     }
 
-    public PendingIntent getQuickReplyIntent() {
-        if (isQuickReply) {
+    public PendingIntent getQuickReplyIntent()
+    {
+        if (isQuickReply)
+        {
             return p;
         }
         return null;
     }
 
-    public String getPackageName() {
+    public String getPackageName()
+    {
         return packageName;
     }
 }

@@ -37,7 +37,7 @@
                 android:paddingTop="7dp"
                 android:paddingEnd="20dp"
                 android:paddingBottom="7dp"
-                android:text="hey i using whatsapp"
+                android:text="Hey I am using whatsapp"
                 android:textColor="@color/black"
                 android:textSize="17dp" />
         </LinearLayout>

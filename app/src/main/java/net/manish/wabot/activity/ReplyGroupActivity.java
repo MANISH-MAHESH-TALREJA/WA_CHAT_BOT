@@ -11,21 +11,21 @@ import net.manish.wabot.databinding.ActivityReplyGroupBinding;
 
 public class ReplyGroupActivity extends AppCompatActivity {
     private SharedPreference preference;
-    ActivityReplyGroupBinding thisb;
+    ActivityReplyGroupBinding myThis;
 
     
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        thisb = (ActivityReplyGroupBinding) DataBindingUtil.setContentView(this, R.layout.activity_reply_group);
+        myThis = (ActivityReplyGroupBinding) DataBindingUtil.setContentView(this, R.layout.activity_reply_group);
         preference = new SharedPreference(this);
-        thisb.switchgroups.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        myThis.switchgroups.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 preference.addToPref_Boolean("GroupEnable", b);
             }
         });
-        thisb.imgGroupBack.setOnClickListener(new View.OnClickListener() {
+        myThis.imgGroupBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -35,6 +35,6 @@ public class ReplyGroupActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        thisb.switchgroups.setChecked(preference.getFromPref_Boolean("GroupEnable"));
+        myThis.switchgroups.setChecked(preference.getFromPref_Boolean("GroupEnable"));
     }
 }

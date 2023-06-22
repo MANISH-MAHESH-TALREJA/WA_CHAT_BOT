@@ -17,7 +17,7 @@
             style="@style/headerText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/outfit_bold"
+            android:fontFamily="@font/poppins_bold"
             android:text="Auto reply to"
             android:textColor="@color/headText"
             android:textSize="16dp"

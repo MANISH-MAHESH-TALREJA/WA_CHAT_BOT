@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,11 +31,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsFragment extends Fragment implements View.OnClickListener {
-    private static int GETCONTACT = 100;
+    //private static final int GETCONTACT = 100;
     private boolean fullScreen = false;
     
     public SharedPreference preference;
-    FragmentContactsBinding thisb;
+    FragmentContactsBinding myThis;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -41,53 +43,50 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        thisb = FragmentContactsBinding.inflate(layoutInflater, viewGroup, false);
-        return thisb.getRoot();
+    public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        myThis = FragmentContactsBinding.inflate(layoutInflater, viewGroup, false);
+        return myThis.getRoot();
     }
 
     @Override
-    public void onViewCreated(View view, Bundle bundle) {
+    public void onViewCreated(@NonNull View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
-        preference = new SharedPreference(getActivity());
-        thisb.imgChooseCont.setOnClickListener(this);
-        thisb.imgFullScreen.setOnClickListener(this);
-        thisb.contactRdtGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        preference = new SharedPreference(requireActivity());
+        myThis.imgChooseCont.setOnClickListener(this);
+        myThis.imgFullScreen.setOnClickListener(this);
+        myThis.contactRdtGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i) {
                     case R.id.rbtnContactList:
                         ContactList();
                         preference.addToPref_String("ContactType", "ContactList");
-                        thisb.imgChooseCont.setVisibility(View.VISIBLE);
-                        thisb.imgFullScreen.setVisibility(View.VISIBLE);
+                        myThis.imgChooseCont.setVisibility(View.VISIBLE);
+                        myThis.imgFullScreen.setVisibility(View.VISIBLE);
                         return;
                     case R.id.rbtnEverone:
                         preference.addToPref_String("ContactType", "Everyone");
-                        thisb.imgChooseCont.setVisibility(View.GONE);
-                        thisb.imgFullScreen.setVisibility(View.GONE);
-                        thisb.linearEmpty.setVisibility(View.VISIBLE);
-                        thisb.contactRecycleView.setVisibility(View.GONE);
-                        thisb.imgEmpty.setImageDrawable(getResources().getDrawable(R.drawable.ic_group));
-                        thisb.txtEmpty.setText("Auto reply to everyone.");
+                        myThis.imgChooseCont.setVisibility(View.GONE);
+                        myThis.imgFullScreen.setVisibility(View.GONE);
+                        myThis.linearEmpty.setVisibility(View.VISIBLE);
+                        myThis.contactRecycleView.setVisibility(View.GONE);
+                        myThis.imgEmpty.setImageDrawable(getResources().getDrawable(R.drawable.ic_group));
+                        myThis.txtEmpty.setText("Auto reply to everyone.");
                         return;
                     case R.id.rbtnExceptContList:
                         preference.addToPref_String("ContactType", "ExceptContList");
-                        thisb.imgChooseCont.setVisibility(View.VISIBLE);
-                        thisb.imgFullScreen.setVisibility(View.VISIBLE);
+                        myThis.imgChooseCont.setVisibility(View.VISIBLE);
+                        myThis.imgFullScreen.setVisibility(View.VISIBLE);
                         ContactList();
                         return;
                     case R.id.rbtnExceptPhoneCont:
-                        if (Build.VERSION.SDK_INT < 23) {
-                            return;
-                        }
                         if (getActivity().checkSelfPermission("android.permission.READ_CONTACTS") == PackageManager.PERMISSION_GRANTED) {
                             preference.addToPref_String("ContactType", "ExceptPhoneList");
-                            thisb.imgChooseCont.setVisibility(View.GONE);
-                            thisb.imgFullScreen.setVisibility(View.GONE);
-                            thisb.linearEmpty.setVisibility(View.VISIBLE);
-                            thisb.contactRecycleView.setVisibility(View.GONE);
-                            thisb.imgEmpty.setImageDrawable(getResources().getDrawable(R.drawable.ic_contact_page));
-                            thisb.txtEmpty.setText("Auto reply to everyone except your phone contacts.");
+                            myThis.imgChooseCont.setVisibility(View.GONE);
+                            myThis.imgFullScreen.setVisibility(View.GONE);
+                            myThis.linearEmpty.setVisibility(View.VISIBLE);
+                            myThis.contactRecycleView.setVisibility(View.GONE);
+                            myThis.imgEmpty.setImageDrawable(getResources().getDrawable(R.drawable.ic_contact_page));
+                            myThis.txtEmpty.setText("Auto reply to everyone except your phone contacts.");
                             return;
                         }
                         ActivityCompat.requestPermissions(getActivity(), new String[]{"android.permission.READ_CONTACTS"}, 100);
@@ -106,14 +105,14 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
         if (id != R.id.imgChooseCont) {
             if (id == R.id.imgFullScreen) {
                 if (!fullScreen) {
-                    thisb.linearRadioBtn.setVisibility(View.GONE);
+                    myThis.linearRadioBtn.setVisibility(View.GONE);
                     fullScreen = true;
-                    thisb.imgFullScreen.setImageDrawable(getResources().getDrawable(R.drawable.ic_fullscreen_exit));
+                    myThis.imgFullScreen.setImageDrawable(getResources().getDrawable(R.drawable.ic_fullscreen_exit));
                     return;
                 }
-                thisb.linearRadioBtn.setVisibility(View.VISIBLE);
+                myThis.linearRadioBtn.setVisibility(View.VISIBLE);
                 fullScreen = false;
-                thisb.imgFullScreen.setImageDrawable(getResources().getDrawable(R.drawable.ic_fullscreen));
+                myThis.imgFullScreen.setImageDrawable(getResources().getDrawable(R.drawable.ic_fullscreen));
             }
         } else if (Build.VERSION.SDK_INT < 23) {
         } else {
@@ -134,20 +133,20 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
         }
         String fromPref_String = preference.getFromPref_String("ContactType");
         if (fromPref_String.equals("EveryOne")) {
-            thisb.imgChooseCont.setVisibility(View.GONE);
-            thisb.rbtnEverone.setChecked(true);
+            myThis.imgChooseCont.setVisibility(View.GONE);
+            myThis.rbtnEverone.setChecked(true);
         } else if (fromPref_String.equals("ContactList")) {
-            thisb.imgChooseCont.setVisibility(View.VISIBLE);
-            thisb.rbtnContactList.setChecked(true);
+            myThis.imgChooseCont.setVisibility(View.VISIBLE);
+            myThis.rbtnContactList.setChecked(true);
         } else if (fromPref_String.equals("ExceptContList")) {
-            thisb.imgChooseCont.setVisibility(View.VISIBLE);
-            thisb.rbtnExceptContList.setChecked(true);
+            myThis.imgChooseCont.setVisibility(View.VISIBLE);
+            myThis.rbtnExceptContList.setChecked(true);
         } else if (fromPref_String.equals("ExceptPhoneList")) {
-            thisb.imgChooseCont.setVisibility(View.GONE);
-            thisb.rbtnExceptPhoneCont.setChecked(true);
+            myThis.imgChooseCont.setVisibility(View.GONE);
+            myThis.rbtnExceptPhoneCont.setChecked(true);
         } else {
-            thisb.imgChooseCont.setVisibility(View.GONE);
-            thisb.rbtnEverone.setChecked(true);
+            myThis.imgChooseCont.setVisibility(View.GONE);
+            myThis.rbtnEverone.setChecked(true);
         }
     }
 
@@ -156,15 +155,15 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
         try {
             if (Const.contactList.isEmpty()) {
                 Const.contactList = new ArrayList();
-                thisb.linearEmpty.setVisibility(View.VISIBLE);
-                thisb.contactRecycleView.setVisibility(View.GONE);
-                thisb.imgEmpty.setImageDrawable(getResources().getDrawable(R.drawable.ic_contacts));
-                thisb.txtEmpty.setText("Add one or more contact to the list.");
+                myThis.linearEmpty.setVisibility(View.VISIBLE);
+                myThis.contactRecycleView.setVisibility(View.GONE);
+                myThis.imgEmpty.setImageDrawable(getResources().getDrawable(R.drawable.ic_contacts));
+                myThis.txtEmpty.setText("Add one or more contact to the list.");
                 return;
             }
-            thisb.linearEmpty.setVisibility(View.GONE);
-            thisb.contactRecycleView.setVisibility(View.VISIBLE);
-            thisb.contactRecycleView.setAdapter(new ContactListAdapter(getActivity(), Const.contactList));
+            myThis.linearEmpty.setVisibility(View.GONE);
+            myThis.contactRecycleView.setVisibility(View.VISIBLE);
+            myThis.contactRecycleView.setAdapter(new ContactListAdapter(getActivity(), Const.contactList));
         } catch (Exception e) {
             Const.contactList = new ArrayList();
             Log.e("Contact List", e.getMessage());
@@ -177,18 +176,17 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
                 Log.e("Adssss", initializationStatus.toString());
             }
         });
-        thisb.bannerAd.loadAd(new AdRequest.Builder().build());
+        myThis.bannerAd.loadAd(new AdRequest.Builder().build());
     }*/
 
     class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ViewHolder> {
-        private Context context;
-        private List<String> listItem;
+        private final List<String> listItem;
 
         public ContactListAdapter(Context context2, List<String> list) {
-            context = context2;
             listItem = list;
         }
 
+        @NonNull
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.contactlist_design_layout, viewGroup, false));

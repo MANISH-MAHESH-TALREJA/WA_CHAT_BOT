@@ -1,6 +1,5 @@
 package net.manish.wabot.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.InputDeviceCompat;
 import androidx.fragment.app.Fragment;
@@ -34,7 +35,7 @@ public class CustomReplyFragment extends Fragment implements View.OnClickListene
     public AutoReplyAdapter adapter;
     private CoordinatorLayout coordinatorLayout;
     private SharedPreference preference;
-    FragmentCustomReplyBinding thisb;
+    FragmentCustomReplyBinding myThis;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -42,20 +43,20 @@ public class CustomReplyFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+    public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         FragmentCustomReplyBinding inflate = FragmentCustomReplyBinding.inflate(layoutInflater, viewGroup, false);
-        thisb = inflate;
+        myThis = inflate;
         return inflate.getRoot();
     }
 
     @Override
-    public void onViewCreated(View view, Bundle bundle) {
+    public void onViewCreated(@NonNull View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
         preference = new SharedPreference(getActivity());
-        thisb.btnAdd.setOnClickListener(this);
-        thisb.msgCustomSwitch.setChecked(preference.getFromPref_Boolean("customAutoReplySwitch"));
+        myThis.btnAdd.setOnClickListener(this);
+        myThis.msgCustomSwitch.setChecked(preference.getFromPref_Boolean("customAutoReplySwitch"));
         Log.e("msgCustomSwitch Value", preference.getFromPref_Boolean("customAutoReplySwitch") + ":::");
-        thisb.msgCustomSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        myThis.msgCustomSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (!b) {
@@ -63,7 +64,7 @@ public class CustomReplyFragment extends Fragment implements View.OnClickListene
                 } else if (!preference.getFromPref_Boolean("CheckedState")) {
                     Toast.makeText(getActivity(), "Please On Auto Reply", Toast.LENGTH_SHORT).show();
                     Log.e("Custom Reply", "Text");
-                    thisb.msgCustomSwitch.setChecked(false);
+                    myThis.msgCustomSwitch.setChecked(false);
                 } else {
                     preference.addToPref_Boolean("customAutoReplySwitch", true);
                 }
@@ -90,22 +91,22 @@ public class CustomReplyFragment extends Fragment implements View.OnClickListene
         try {
             if (Const.replyList != null) {
                 if (!Const.replyList.isEmpty()) {
-                    thisb.txtEmpty.setVisibility(View.GONE);
-                    thisb.linearList.setVisibility(View.VISIBLE);
+                    myThis.txtEmpty.setVisibility(View.GONE);
+                    myThis.linearList.setVisibility(View.VISIBLE);
 
                     adapter = new AutoReplyAdapter(getActivity(), Const.replyList);
-                    thisb.customRecycleview.setAdapter(adapter);
+                    myThis.customRecycleview.setAdapter(adapter);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                     linearLayoutManager.setReverseLayout(true);
                     linearLayoutManager.setStackFromEnd(true);
-                    thisb.customRecycleview.setLayoutManager(linearLayoutManager);
+                    myThis.customRecycleview.setLayoutManager(linearLayoutManager);
                     enableSwipeToDeleteAndUndo();
                 }
             }
             else{
                 Const.replyList = new ArrayList();
-                thisb.txtEmpty.setVisibility(View.VISIBLE);
-                thisb.linearList.setVisibility(View.GONE);
+                myThis.txtEmpty.setVisibility(View.VISIBLE);
+                myThis.linearList.setVisibility(View.GONE);
 
             }
         } catch (Exception e) {
@@ -127,23 +128,23 @@ public class CustomReplyFragment extends Fragment implements View.OnClickListene
     private void enableSwipeToDeleteAndUndo() {
         new ItemTouchHelper(new SwipeToDeleteCallBack(getActivity()) {
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int i) {
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
                 super.onSwiped(viewHolder, i);
                 final int adapterPosition = viewHolder.getAdapterPosition();
                 final AutoReply autoReply =adapter.getData().get(adapterPosition);
                adapter.removeItem(adapterPosition);
                adapter.notifyDataSetChanged();
-                Snackbar make = Snackbar.make(thisb.getRoot(), (CharSequence) "Item was removed from the list.", 0);
+                Snackbar make = Snackbar.make(myThis.getRoot(), (CharSequence) "Item was removed from the list.", 0);
                 make.setAction((CharSequence) "UNDO", (View.OnClickListener) new View.OnClickListener() {
                     public void onClick(View view) {
                        adapter.restoreItem(autoReply, adapterPosition);
-                       thisb.customRecycleview.scrollToPosition(adapterPosition);
+                       myThis.customRecycleview.scrollToPosition(adapterPosition);
                        adapter.notifyDataSetChanged();
                     }
                 });
                 make.setActionTextColor((int) InputDeviceCompat.SOURCE_ANY);
                 make.show();
             }
-        }).attachToRecyclerView(thisb.customRecycleview);
+        }).attachToRecyclerView(myThis.customRecycleview);
     }
 }

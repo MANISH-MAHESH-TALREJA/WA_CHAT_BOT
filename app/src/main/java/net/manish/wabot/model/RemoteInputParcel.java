@@ -3,15 +3,20 @@ package net.manish.wabot.model;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import androidx.core.app.RemoteInput;
 
-public class RemoteInputParcel implements Parcelable {
-    public static final Creator CREATOR = new Creator() {
-        public RemoteInputParcel createFromParcel(Parcel parcel) {
+public class RemoteInputParcel implements Parcelable
+{
+    public static final Creator CREATOR = new Creator()
+    {
+        public RemoteInputParcel createFromParcel(Parcel parcel)
+        {
             return new RemoteInputParcel(parcel);
         }
 
-        public RemoteInputParcel[] newArray(int i) {
+        public RemoteInputParcel[] newArray(int i)
+        {
             return new RemoteInputParcel[i];
         }
     };
@@ -21,11 +26,13 @@ public class RemoteInputParcel implements Parcelable {
     private String label;
     private String resultKey;
 
-    public int describeContents() {
+    public int describeContents()
+    {
         return 0;
     }
 
-    public RemoteInputParcel(RemoteInput remoteInput) {
+    public RemoteInputParcel(RemoteInput remoteInput)
+    {
         label = remoteInput.getLabel().toString();
         resultKey = remoteInput.getResultKey();
         charSequenceToStringArray(remoteInput.getChoices());
@@ -33,7 +40,8 @@ public class RemoteInputParcel implements Parcelable {
         extras = remoteInput.getExtras();
     }
 
-    public RemoteInputParcel(Parcel parcel) {
+    public RemoteInputParcel(Parcel parcel)
+    {
         boolean z = false;
         label = parcel.readString();
         resultKey = parcel.readString();
@@ -42,37 +50,46 @@ public class RemoteInputParcel implements Parcelable {
         extras = (Bundle) parcel.readParcelable(Bundle.class.getClassLoader());
     }
 
-    public void charSequenceToStringArray(CharSequence[] charSequenceArr) {
-        if (charSequenceArr != null) {
+    public void charSequenceToStringArray(CharSequence[] charSequenceArr)
+    {
+        if (charSequenceArr != null)
+        {
             int length = charSequenceArr.length;
             choices = new String[charSequenceArr.length];
-            for (int i = 0; i < length; i++) {
+            for (int i = 0; i < length; i++)
+            {
                 choices[i] = charSequenceArr[i].toString();
             }
         }
     }
 
-    public String getResultKey() {
+    public String getResultKey()
+    {
         return resultKey;
     }
 
-    public String getLabel() {
+    public String getLabel()
+    {
         return label;
     }
 
-    public CharSequence[] getChoices() {
+    public CharSequence[] getChoices()
+    {
         return choices;
     }
 
-    public boolean isAllowFreeFormInput() {
+    public boolean isAllowFreeFormInput()
+    {
         return allowFreeFormInput;
     }
 
-    public Bundle getExtras() {
+    public Bundle getExtras()
+    {
         return extras;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(Parcel parcel, int i)
+    {
         parcel.writeString(label);
         parcel.writeString(resultKey);
         parcel.writeStringArray(choices);

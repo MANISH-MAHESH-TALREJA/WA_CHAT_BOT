@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import net.manish.wabot.R;
@@ -18,29 +20,16 @@ import net.manish.wabot.activity.ReplyMessageListActivity;
 import net.manish.wabot.databinding.FragmentStatisticsBinding;
 import net.manish.wabot.model.StatisticsReplyMsgListModel;
 import net.manish.wabot.utilities.Const;
-/*import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdLoader;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.formats.UnifiedNativeAd;
-
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;*/
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StatisticsFragment extends Fragment implements View.OnClickListener {
     int count = 0;
-    private List<String> messageList;
-    
-    //public UnifiedNativeAd nativeAd;
-    private List<String> personList;
+
     private SharedPreference preference;
     private List<StatisticsReplyMsgListModel> staticList;
-    private List<StatisticsReplyMsgListModel> staticReplylList;
-    FragmentStatisticsBinding thisb;
+    FragmentStatisticsBinding myThis;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -48,28 +37,29 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+    public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         FragmentStatisticsBinding inflate = FragmentStatisticsBinding.inflate(layoutInflater, viewGroup, false);
-        thisb = inflate;
+        myThis = inflate;
         return inflate.getRoot();
     }
 
     @Override
-    public void onViewCreated(View view, Bundle bundle) {
+    public void onViewCreated(@NonNull View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
         preference = new SharedPreference(getActivity());
         Const.staticsReplyList = new ArrayList();
         staticList = new ArrayList();
-        staticReplylList = new ArrayList();
-        messageList = new ArrayList();
-        personList = new ArrayList();
+        List<StatisticsReplyMsgListModel> staticReplyList = new ArrayList();
+        List<String> messageList = new ArrayList();
+        //public UnifiedNativeAd nativeAd;
+        List<String> personList = new ArrayList();
         long fromPref_Long = preference.getFromPref_Long("Counter");
         Log.e("Counter Value", fromPref_Long + ":::");
-        thisb.txtCounter.setText(String.valueOf(fromPref_Long));
-        thisb.imgReset.setOnClickListener(this);
+        myThis.txtCounter.setText(String.valueOf(fromPref_Long));
+        myThis.imgReset.setOnClickListener(this);
         //TMAdsUtils.initAd(getContext());
-        //TMAdsUtils.loadNativeAd(getContext(), thisb.myTemplate);
-        staticReplylList = preference.getReplyList("StaticsReplyList");
+        //TMAdsUtils.loadNativeAd(getContext(), myThis.myTemplate);
+        staticReplyList = preference.getReplyList("StaticsReplyList");
         /*if (isAdded()) {
             new Handler().postDelayed(new Runnable() {
                 public void run() {
@@ -78,28 +68,28 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
             }, 1000);
         }*/
         int i = 0;
-        if (staticReplylList==null){
-            staticReplylList=new ArrayList<>();
+        if (staticReplyList ==null){
+            staticReplyList =new ArrayList<>();
         }
-        while (i < staticReplylList.size()) {
+        while (i < staticReplyList.size()) {
             try {
-                if (!messageList.contains(staticReplylList.get(i).getReplyMsg())) {
-                    messageList.add(staticReplylList.get(i).getReplyMsg());
+                if (!messageList.contains(staticReplyList.get(i).getReplyMsg())) {
+                    messageList.add(staticReplyList.get(i).getReplyMsg());
                 }
                 i++;
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e("Statics MESSAGE LIST", e.getMessage());
-                staticReplylList = new ArrayList();
+                staticReplyList = new ArrayList();
                 return;
             }
         }
         for (int i2 = 0; i2 < messageList.size(); i2++) {
-            for (int i3 = 0; i3 < staticReplylList.size(); i3++) {
-                if (messageList.get(i2).equals(staticReplylList.get(i3).getReplyMsg())) {
+            for (int i3 = 0; i3 < staticReplyList.size(); i3++) {
+                if (messageList.get(i2).equals(staticReplyList.get(i3).getReplyMsg())) {
                     count++;
-                    if (!personList.contains(staticReplylList.get(i3).getPersonName())) {
-                        personList.add(staticReplylList.get(i3).getPersonName());
+                    if (!personList.contains(staticReplyList.get(i3).getPersonName())) {
+                        personList.add(staticReplyList.get(i3).getPersonName());
                     }
                 }
             }
@@ -117,7 +107,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.imgReset) {
-            thisb.txtCounter.setText("0");
+            myThis.txtCounter.setText("0");
             preference.addToPref_Long("Counter", 0);
         }
     }
@@ -130,15 +120,15 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
             if (staticList != null) {
                 if (!staticList.isEmpty()) {
-                    thisb.txtMessgesEmpty.setVisibility(View.GONE);
-                    thisb.staticRecycleview.setVisibility(View.VISIBLE);
-                    thisb.staticRecycleview.setAdapter(new StatisticsReplyMsgListAdapter(getActivity(), staticList));
+                    myThis.txtMessgesEmpty.setVisibility(View.GONE);
+                    myThis.staticRecycleview.setVisibility(View.VISIBLE);
+                    myThis.staticRecycleview.setAdapter(new StatisticsReplyMsgListAdapter(getActivity(), staticList));
                     return;
                 }
             }
             staticList = new ArrayList();
-            thisb.txtMessgesEmpty.setVisibility(View.VISIBLE);
-            thisb.staticRecycleview.setVisibility(View.GONE);
+            myThis.txtMessgesEmpty.setVisibility(View.VISIBLE);
+            myThis.staticRecycleview.setVisibility(View.GONE);
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("STATICS LIST", e.getMessage());
@@ -186,14 +176,15 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     }
 
     public class StatisticsReplyMsgListAdapter extends RecyclerView.Adapter<StatisticsReplyMsgListAdapter.ViewHolder> {
-        private Context context;
-        private List<StatisticsReplyMsgListModel> listItem;
+        private final Context context;
+        private final List<StatisticsReplyMsgListModel> listItem;
 
         public StatisticsReplyMsgListAdapter(Context context2, List<StatisticsReplyMsgListModel> list) {
             context = context2;
             listItem = list;
         }
 
+        @NonNull
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.statistics_reply_messages_list_design_layout, viewGroup, false));

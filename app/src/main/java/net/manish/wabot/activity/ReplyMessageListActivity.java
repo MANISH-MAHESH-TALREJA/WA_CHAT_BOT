@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,26 +24,21 @@ import java.util.Date;
 import java.util.List;
 
 public class ReplyMessageListActivity extends AppCompatActivity {
-    private static List<String> timeList;
-    private String message;
-    private SharedPreference preference;
-    private List<ReplyMessageListModel> replyMsgList;
-    private List<StatisticsReplyMsgListModel> staticsList;
-    ActivityReplyMessageListBinding thisb;
+    ActivityReplyMessageListBinding myThis;
 
     
     @Override
     public void onCreate(Bundle bundle) {
         String str;
         super.onCreate(bundle);
-        thisb = (ActivityReplyMessageListBinding) DataBindingUtil.setContentView(this, R.layout.activity_reply_message_list);
-        preference = new SharedPreference(this);
-        replyMsgList = new ArrayList();
-        staticsList = new ArrayList();
-        timeList = new ArrayList();
-        message = getIntent().getStringExtra("Message");
-        thisb.txtReplyMsg.setText(message);
-        thisb.imgListBack.setOnClickListener(new View.OnClickListener() {
+        myThis = (ActivityReplyMessageListBinding) DataBindingUtil.setContentView(this, R.layout.activity_reply_message_list);
+        SharedPreference preference = new SharedPreference(this);
+        List<ReplyMessageListModel> replyMsgList = new ArrayList();
+        List<StatisticsReplyMsgListModel> staticsList = new ArrayList();
+        List<String> timeList = new ArrayList();
+        String message = getIntent().getStringExtra("Message");
+        myThis.txtReplyMsg.setText(message);
+        myThis.imgListBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -56,7 +53,7 @@ public class ReplyMessageListActivity extends AppCompatActivity {
                     String format = new SimpleDateFormat("EEE, MMM d, yyyy").format(date);
                     String format2 = new SimpleDateFormat("h:mm a").format(date);
                     if (!timeList.contains(format)) {
-                        timeList.add(String.valueOf(format));
+                        timeList.add(format);
                         str = "False";
                     } else {
                         str = "True";
@@ -64,7 +61,7 @@ public class ReplyMessageListActivity extends AppCompatActivity {
                     replyMsgList.add(new ReplyMessageListModel(staticsList.get(size).getPersonName(), format, format2, str));
                 }
             }
-            thisb.msgListRecyclerView.setAdapter(new ReplyMessageListAdapter(this, replyMsgList));
+            myThis.msgListRecyclerView.setAdapter(new ReplyMessageListAdapter(this, replyMsgList));
         } catch (Exception e) {
             Log.e("Reply List", e.getMessage());
         }
@@ -72,14 +69,13 @@ public class ReplyMessageListActivity extends AppCompatActivity {
 
 
     public class ReplyMessageListAdapter extends RecyclerView.Adapter<ReplyMessageListAdapter.ViewHolder> {
-        private Context context;
-        private List<ReplyMessageListModel> listItem;
+        private final List<ReplyMessageListModel> listItem;
 
         public ReplyMessageListAdapter(Context context2, List<ReplyMessageListModel> list) {
-            context = context2;
             listItem = list;
         }
 
+        @NonNull
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.reply_messsage_list_design_layout, viewGroup, false));

@@ -101,7 +101,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/direct_rounded"
                         android:focusable="true"
-                        android:fontFamily="@font/outfit_bold"
+                        android:fontFamily="@font/poppins_bold"
                         android:hint="Phone Number"
                         android:inputType="number"
                         android:paddingTop="30dp"
@@ -135,7 +135,7 @@
                     android:layout_marginBottom="10dp"
                     android:background="@android:color/transparent"
                     android:focusable="true"
-                    android:hint="Message(optional)"
+                    android:hint="Message (optional)"
                     android:inputType="text"
                     android:paddingTop="30dp"
                     android:textColor="@color/black"
@@ -169,7 +169,7 @@
                         android:layout_weight="1"
                         android:buttonTint="@color/app_color"
                         android:gravity="center_vertical"
-                        android:text="Whatsapp"
+                        android:text="WhatsApp"
                         android:textStyle="normal" />
 
                     <RadioButton
@@ -180,7 +180,7 @@
                         android:layout_marginStart="8dp"
                         android:buttonTint="@color/app_color"
                         android:gravity="center"
-                        android:text="Whatsapp Business"
+                        android:text="WhatsApp Business"
                         android:textStyle="normal" />
                 </RadioGroup>
             </LinearLayout>
@@ -212,7 +212,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="10dp"
-                            android:text="There are no any Image.Please click the camera button to choose image" />
+                            android:text="There is no image. Kindly click on the camera button to choose an image" />
 
                         <ImageView
                             android:id="@+id/imgSetImage"

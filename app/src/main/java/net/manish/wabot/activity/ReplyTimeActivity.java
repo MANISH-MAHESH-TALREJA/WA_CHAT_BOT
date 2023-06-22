@@ -1,7 +1,6 @@
 package net.manish.wabot.activity;
 
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Html;
@@ -30,7 +29,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ReplyTimeActivity extends AppCompatActivity implements View.OnClickListener {
-    private AlertDialog.Builder builder;
     private int compareHour;
     private int compareMinute;
     private String eTime = "";
@@ -40,15 +38,14 @@ public class ReplyTimeActivity extends AppCompatActivity implements View.OnClick
     private String sTime = "";
     public String spinTime = "";
     public String startTime = "";
-    ActivityReplyTimeBinding thisb;
+    ActivityReplyTimeBinding myThis;
     public String time = "";
-    private TimePickerDialog timePickerDialog;
 
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        thisb = (ActivityReplyTimeBinding) DataBindingUtil.setContentView(this, R.layout.activity_reply_time);
+        myThis = (ActivityReplyTimeBinding) DataBindingUtil.setContentView(this, R.layout.activity_reply_time);
        preference = new SharedPreference(this);
        time = preference.getFromPref_String("TimeofMsg");
         if (time.equals("")) {
@@ -61,23 +58,23 @@ public class ReplyTimeActivity extends AppCompatActivity implements View.OnClick
         sTime = preference.getFromPref_String("StartTime");
         eTime = preference.getFromPref_String("EndTime");
         if (sTime.equals("")) {
-            thisb.txtStartTime.setText("No start time selected");
+            myThis.txtStartTime.setText("No start time selected");
         } else {
-            thisb.txtStartTime.setText(sTime);
+            myThis.txtStartTime.setText(sTime);
         }
         if (eTime.equals("")) {
-            thisb.txtEndTime.setText("No start time selected");
+            myThis.txtEndTime.setText("No start time selected");
         } else {
-            thisb.txtEndTime.setText(eTime);
+            myThis.txtEndTime.setText(eTime);
         }
-        thisb.chkScheduleTime.setChecked(preference.getFromPref_Boolean("ScheduleTime"));
-        thisb.chkImmediately.setOnClickListener(this);
-        thisb.chkTime.setOnClickListener(this);
-        thisb.chkOnce.setOnClickListener(this);
-        thisb.imgTimeback.setOnClickListener(this);
-        thisb.linearStartTime.setOnClickListener(this);
-        thisb.linearEndTime.setOnClickListener(this);
-        thisb.chkScheduleTime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        myThis.chkScheduleTime.setChecked(preference.getFromPref_Boolean("ScheduleTime"));
+        myThis.chkImmediately.setOnClickListener(this);
+        myThis.chkTime.setOnClickListener(this);
+        myThis.chkOnce.setOnClickListener(this);
+        myThis.imgTimeback.setOnClickListener(this);
+        myThis.linearStartTime.setOnClickListener(this);
+        myThis.linearEndTime.setOnClickListener(this);
+        myThis.chkScheduleTime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
@@ -95,15 +92,15 @@ public class ReplyTimeActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (thisb.chkScheduleTime.isChecked() && sTime.equals("") && eTime.equals("")) {
+        if (myThis.chkScheduleTime.isChecked() && sTime.equals("") && eTime.equals("")) {
             Toast.makeText(this, "Please Select the time", Toast.LENGTH_SHORT).show();
         }
     }
     private void checkBoxText() {
-        thisb.chkImmediately.setText(Html.fromHtml("<font color='black'>Reply Immediately</font><br><font color='#808080'>Don't delay in sending auto-reply </font>"));
-        thisb.chkTime.setText(Html.fromHtml("<font color='black'>Wait Time</font><br><font color='#808080'>Don't send a reply immediately to the same person,wait for " + time + " " + spinTime + " for the next auto-reply </font>"));
-        thisb.chkOnce.setText(Html.fromHtml("<font color='black'>Reply Once</font><br><font color='#808080'>Reply only once to the same person/group until you ON auto-reply next time </font>"));
-        thisb.chkScheduleTime.setText(Html.fromHtml("<font color='black'>Schedule Reply Time</font><br><font color='#808080'>Reply only scheduled time that you set for auto reply messages</font>"));
+        myThis.chkImmediately.setText(Html.fromHtml("<font color='black'>Reply Immediately</font><br><font color='#808080'>Don't delay in sending auto-reply </font>"));
+        myThis.chkTime.setText(Html.fromHtml("<font color='black'>Wait Time</font><br><font color='#808080'>Don't send a reply immediately to the same person,wait for " + time + " " + spinTime + " for the next auto-reply </font>"));
+        myThis.chkOnce.setText(Html.fromHtml("<font color='black'>Reply Once</font><br><font color='#808080'>Reply only once to the same person/group until you ON auto-reply next time </font>"));
+        myThis.chkScheduleTime.setText(Html.fromHtml("<font color='black'>Schedule Reply Time</font><br><font color='#808080'>Reply only scheduled time that you set for auto reply messages</font>"));
     }
 
     /*private void bannerAd() {
@@ -113,7 +110,7 @@ public class ReplyTimeActivity extends AppCompatActivity implements View.OnClick
                 Log.e("Adssss", initializationStatus.toString());
             }
         });
-        thisb.bannerAd.loadAd(new AdRequest.Builder().build());
+        myThis.bannerAd.loadAd(new AdRequest.Builder().build());
     }*/
 
     @Override
@@ -121,17 +118,17 @@ public class ReplyTimeActivity extends AppCompatActivity implements View.OnClick
         super.onResume();
         checkBoxText();
         if (preference.getFromPref_Boolean("Once")) {
-            thisb.chkOnce.setChecked(true);
-            thisb.chkImmediately.setChecked(false);
-            thisb.chkTime.setChecked(false);
+            myThis.chkOnce.setChecked(true);
+            myThis.chkImmediately.setChecked(false);
+            myThis.chkTime.setChecked(false);
         } else if (preference.getFromPref_Boolean("Time")) {
-            thisb.chkOnce.setChecked(false);
-            thisb.chkImmediately.setChecked(false);
-            thisb.chkTime.setChecked(true);
+            myThis.chkOnce.setChecked(false);
+            myThis.chkImmediately.setChecked(false);
+            myThis.chkTime.setChecked(true);
         } else if (preference.getFromPref_Boolean("Immediately")) {
-            thisb.chkOnce.setChecked(false);
-            thisb.chkImmediately.setChecked(true);
-            thisb.chkTime.setChecked(false);
+            myThis.chkOnce.setChecked(false);
+            myThis.chkImmediately.setChecked(true);
+            myThis.chkTime.setChecked(false);
         }
     }
 
@@ -139,26 +136,26 @@ public class ReplyTimeActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.chkContain:
-                thisb.chkImmediately.setChecked(true);
-                thisb.chkTime.setChecked(false);
-                thisb.chkOnce.setChecked(false);
+                myThis.chkImmediately.setChecked(true);
+                myThis.chkTime.setChecked(false);
+                myThis.chkOnce.setChecked(false);
                 preference.addToPref_Boolean("Immediately", true);
                 preference.addToPref_Boolean("Once", false);
                 preference.addToPref_Boolean("Time", false);
                 return;
             case R.id.chkOnce :
-                thisb.chkOnce.setChecked(true);
-                thisb.chkTime.setChecked(false);
-                thisb.chkImmediately.setChecked(false);
+                myThis.chkOnce.setChecked(true);
+                myThis.chkTime.setChecked(false);
+                myThis.chkImmediately.setChecked(false);
                 preference.addToPref_Boolean("Once", true);
                 preference.addToPref_Boolean("Time", false);
                 preference.addToPref_Boolean("Immediately", false);
                 return;
             case R.id.chkTime :
-                thisb.chkTime.setChecked(true);
-                thisb.chkImmediately.setChecked(false);
-                thisb.chkOnce.setChecked(false);
-                builder = new AlertDialog.Builder(this);
+                myThis.chkTime.setChecked(true);
+                myThis.chkImmediately.setChecked(false);
+                myThis.chkOnce.setChecked(false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle((CharSequence) "Wait Time");
                 View inflate = getLayoutInflater().inflate(R.layout.reply_time_design_layout, (ViewGroup) null);
                 builder.setView(inflate);
@@ -183,12 +180,12 @@ public class ReplyTimeActivity extends AppCompatActivity implements View.OnClick
 
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        preference.addToPref_String("TimeofMsg", editText.getText().toString().toString().trim());
+                        preference.addToPref_String("TimeofMsg", editText.getText().toString().trim());
                         preference.addToPref_String("SpinTime", spinner.getSelectedItem().toString());
                         Log.e("Spin Value", spinner.getSelectedItem().toString() + "::::");
-                        time = editText.getText().toString().toString().trim();
+                        time = editText.getText().toString().trim();
                         spinTime = spinner.getSelectedItem().toString();
-                        thisb.chkTime.setText(Html.fromHtml("<font color='black'>Wait Time</f><br><font color='#808080'>Don't send a reply immediately to the same person,wait for " + time + " " + spinTime + " for the next auto-reply </font>"));
+                        myThis.chkTime.setText(Html.fromHtml("<font color='black'>Wait Time</f><br><font color='#808080'>Don't send a reply immediately to the same person,wait for " + time + " " + spinTime + " for the next auto-reply </font>"));
                         dialogInterface.dismiss();
                     }
                 });
@@ -199,24 +196,33 @@ public class ReplyTimeActivity extends AppCompatActivity implements View.OnClick
                 return;
             case R.id.imgTimeback :
                 finish();
-                if (thisb.chkScheduleTime.isChecked() && sTime.equals("") && eTime.equals("")) {
+                if (myThis.chkScheduleTime.isChecked() && sTime.equals("") && eTime.equals("")) {
                     Toast.makeText(this, "Please Select the time", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 return;
             case R.id.linearEndTime :
                 Calendar instance = Calendar.getInstance();
-                timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-                    public void onTimeSet(TimePicker timePicker, int i, int i2) {
-                        if (i == 0) {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener()
+                {
+                    public void onTimeSet(TimePicker timePicker, int i, int i2)
+                    {
+                        if (i == 0)
+                        {
                             i += 12;
-                             formate = "AM";
-                        } else if (i == 12) {
+                            formate = "AM";
+                        }
+                        else if (i == 12)
+                        {
                             formate = "PM";
-                        } else if (i > 12) {
+                        }
+                        else if (i > 12)
+                        {
                             i -= 12;
                             formate = "PM";
-                        } else {
+                        }
+                        else
+                        {
                             formate = "AM";
                         }
                         endTime = String.format("%02d", new Object[]{Integer.valueOf(i)}) + ":" + String.format("%02d", new Object[]{Integer.valueOf(i2)}) + " " + formate;
@@ -224,22 +230,27 @@ public class ReplyTimeActivity extends AppCompatActivity implements View.OnClick
                         sb.append(endTime);
                         sb.append(":::");
                         Log.e("End Time", sb.toString());
-                        try {
+                        try
+                        {
                             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
-                            if (startTime.isEmpty() && startTime.equals("")) {
+                            if (startTime.isEmpty() && startTime.equals(""))
+                            {
                                 ReplyTimeActivity replyTimeActivity = ReplyTimeActivity.this;
                                 String unused6 = replyTimeActivity.startTime = replyTimeActivity.preference.getFromPref_String("StartTime");
                             }
                             Date parse = simpleDateFormat.parse(startTime);
                             Date parse2 = simpleDateFormat.parse(endTime);
-                            if (isAfterTime(parse, parse2)) {
+                            if (isAfterTime(parse, parse2))
+                            {
                                 Toast.makeText(ReplyTimeActivity.this, "Please select proper Time", Toast.LENGTH_SHORT).show();
                                 Log.e("After Time", isAfterTime(parse, parse2) + "::::");
                                 return;
                             }
-                            thisb.txtEndTime.setText(endTime);
+                            myThis.txtEndTime.setText(endTime);
                             preference.addToPref_String("EndTime", endTime);
-                        } catch (ParseException e) {
+                        }
+                        catch (ParseException e)
+                        {
                             e.printStackTrace();
                             Log.e("EndTime", e.getMessage());
                         }
@@ -263,7 +274,7 @@ public class ReplyTimeActivity extends AppCompatActivity implements View.OnClick
                              formate = "AM";
                         }
                         startTime = String.format("%02d", new Object[]{Integer.valueOf(i)}) + ":" + String.format("%02d", new Object[]{Integer.valueOf(i2)}) + " " + formate;
-                        thisb.txtStartTime.setText(startTime);
+                        myThis.txtStartTime.setText(startTime);
                         preference.addToPref_String("StartTime", startTime);
                     }
                 }, instance2.get(11), instance2.get(12), false);

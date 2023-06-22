@@ -11,6 +11,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -20,19 +22,17 @@ import net.manish.wabot.databinding.ActivityPermissionCheckBinding;
 
 public class PermissionCheckActivity extends AppCompatActivity {
     public static final String storageManualAlertMsg = "We need your permissions to access the camera and storage. Please permit the permission through\nSettings screen.\n\nSelect Permissions -> Enable permission";
-    private int MULTIPLE_PERMISSIONS = 100;
-    private Context context;
+    private final int MULTIPLE_PERMISSIONS = 100;
     String[] permissions = {"android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.READ_CONTACTS", "android.permission.CAMERA"};
-    private SharedPreference preference;
-    ActivityPermissionCheckBinding thisb;
+    ActivityPermissionCheckBinding myThis;
 
     
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        thisb = (ActivityPermissionCheckBinding) DataBindingUtil.setContentView(this, R.layout.activity_permission_check);
-        context = this;
-        preference = new SharedPreference(this);
+        myThis = (ActivityPermissionCheckBinding) DataBindingUtil.setContentView(this, R.layout.activity_permission_check);
+        Context context = this;
+        SharedPreference preference = new SharedPreference(this);
         hasPermissions(context, permissions);
     }
 
@@ -43,7 +43,7 @@ public class PermissionCheckActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int i, String[] strArr, int[] iArr) {
+    public void onRequestPermissionsResult(int i, @NonNull String[] strArr, @NonNull int[] iArr) {
         super.onRequestPermissionsResult(i, strArr, iArr);
         if (i == MULTIPLE_PERMISSIONS) {
             if (iArr.length <= 0 || iArr[0] != 0) {

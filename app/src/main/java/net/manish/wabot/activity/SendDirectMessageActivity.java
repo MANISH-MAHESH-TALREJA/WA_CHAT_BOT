@@ -20,26 +20,20 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
+
 import net.manish.wabot.R;
 import net.manish.wabot.SharedPreference;
 import net.manish.wabot.databinding.ActivitySendDirectMessageBinding;
 import net.manish.wabot.model.PhoneNumberModel;
 import net.manish.wabot.utilities.Const;
-/*import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdLoader;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.formats.UnifiedNativeAd;
 
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;*/
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -47,142 +41,182 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class SendDirectMessageActivity extends AppCompatActivity implements View.OnClickListener {
+public class SendDirectMessageActivity extends AppCompatActivity implements View.OnClickListener
+{
     private static final int CAMERA_REQUEST = 1000;
-    private static int DELIMAGE = 100;
+    private static final int DELIMAGE = 100;
     private static final int REQUEST_ID_PERMISSIONS = 100;
     private static final int SELECT_PICTURE = 1;
-    private static String currentPhotoPath;
     private File file;
-    //public UnifiedNativeAd nativeAd;
-    private List<PhoneNumberModel> numberList;
-    private String phonenumber;
+    private String phoneNumber;
     public Uri photoURI;
-    private SharedPreference preference;
     public Uri shareUri = Uri.EMPTY;
     public int chatType = 1;
-    ActivitySendDirectMessageBinding thisb;
+    ActivitySendDirectMessageBinding myThis;
 
     @Override
-    public void onCreate(Bundle bundle) {
+    public void onCreate(Bundle bundle)
+    {
         super.onCreate(bundle);
-        thisb = (ActivitySendDirectMessageBinding) DataBindingUtil.setContentView(this, R.layout.activity_send_direct_message);
-        preference = new SharedPreference(this);
-        numberList = new ArrayList();
+        myThis = (ActivitySendDirectMessageBinding) DataBindingUtil.setContentView(this, R.layout.activity_send_direct_message);
+        SharedPreference preference = new SharedPreference(this);
+        //public UnifiedNativeAd nativeAd;
+        List<PhoneNumberModel> numberList = new ArrayList();
         //nativeAds();
-        thisb.imgDirectBack.setOnClickListener(this);
-        thisb.imgChoose.setOnClickListener(this);
-        thisb.btnSendMsg.setOnClickListener(this);
-        numberList= preference.getNumberList("NumberList");
-        try {
-            if (numberList.isEmpty()) {
+        myThis.imgDirectBack.setOnClickListener(this);
+        myThis.imgChoose.setOnClickListener(this);
+        myThis.btnSendMsg.setOnClickListener(this);
+        numberList = preference.getNumberList("NumberList");
+        try
+        {
+            if (numberList.isEmpty())
+            {
                 numberList = new ArrayList();
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Log.e("Number List", e.getMessage());
             numberList = new ArrayList();
         }
-        thisb.phoneNumberRecycleview.setAdapter(new PhoneNumberAdapter(this, numberList));
-        thisb.directChatRadioGroup.check(R.id.rb_direct_chat_whatsapp);
-        thisb.directChatRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        myThis.phoneNumberRecycleview.setAdapter(new PhoneNumberAdapter(this, numberList));
+        myThis.directChatRadioGroup.check(R.id.rb_direct_chat_whatsapp);
+        myThis.directChatRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                chatType = ((RadioButton) thisb.directChatRadioGroup.findViewById(thisb.directChatRadioGroup.getCheckedRadioButtonId())).getId() == R.id.rb_direct_chat_whatsapp ? 1 : 2;
+            public void onCheckedChanged(RadioGroup group, int checkedId)
+            {
+                chatType = ((RadioButton) myThis.directChatRadioGroup.findViewById(myThis.directChatRadioGroup.getCheckedRadioButtonId())).getId() == R.id.rb_direct_chat_whatsapp ? 1 : 2;
             }
         });
     }
 
 
     @Override
-    public void onClick(View view) {
+    public void onClick(View view)
+    {
         int id = view.getId();
-        if (id == R.id.imgDirectBack) {
-                finish();
+        if (id == R.id.imgDirectBack)
+        {
+            finish();
         }
-        if (id== R.id.btnSendMsg){
-            String obj =  thisb.edMessage.getText().toString().toString();
-            String obj2 = thisb.edPhoneNumber.getText().toString();
-            String str =thisb.countryCode.getSelectedCountryCode() + obj2;
-            if (obj.length() == 0) {
+        if (id == R.id.btnSendMsg)
+        {
+            String obj = myThis.edMessage.getText().toString();
+            String obj2 = myThis.edPhoneNumber.getText().toString();
+            String str = myThis.countryCode.getSelectedCountryCode() + obj2;
+            if (obj.length() == 0)
+            {
                 Toast.makeText(SendDirectMessageActivity.this, "Please enter message", Toast.LENGTH_SHORT).show();
-            } else if (obj2.length() == 0) {
-                thisb.edPhoneNumber.setError("Please enter phone number");
-                thisb.edPhoneNumber.requestFocus();
-            } else if (obj2.length() < 7 || obj.length() <= 0) {
-                thisb.edPhoneNumber.setError("Please write correct phone number");
-                thisb.edPhoneNumber.requestFocus();
-            } else {
-                try {
+            }
+            else if (obj2.length() == 0)
+            {
+                myThis.edPhoneNumber.setError("Please enter phone number");
+                myThis.edPhoneNumber.requestFocus();
+            }
+            else if (obj2.length() < 7 || obj.length() <= 0)
+            {
+                myThis.edPhoneNumber.setError("Please write correct phone number");
+                myThis.edPhoneNumber.requestFocus();
+            }
+            else
+            {
+                try
+                {
                     PackageManager packageManager = SendDirectMessageActivity.this.getPackageManager();
                     Intent intent = new Intent("android.intent.action.VIEW");
 
-                    try {
+                    try
+                    {
                         intent.setPackage(chatType == 1 ? "com.whatsapp" : "com.whatsapp.w4b");
                         intent.setData(Uri.parse("https://api.whatsapp.com/send?phone=" + str + "&text=" + obj));
-                        if (intent.resolveActivity(packageManager) != null) {
+                        if (intent.resolveActivity(packageManager) != null)
+                        {
                             SendDirectMessageActivity.this.startActivity(intent);
                         }
-                        else{
-                            Toast.makeText(this, chatType == 1 ? "Whatsapp" : "Whatsapp Business"+" Not install", Toast.LENGTH_SHORT).show();
+                        else
+                        {
+                            Toast.makeText(this, chatType == 1 ? "Whatsapp" : "Whatsapp Business" + " Not install", Toast.LENGTH_SHORT).show();
                         }
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e)
+                    {
                         e.printStackTrace();
                     }
-                } catch (Exception e2) {
-                    Toast.makeText(SendDirectMessageActivity.this, "Error/n" + e2.toString(), Toast.LENGTH_SHORT).show();
+                }
+                catch (Exception e2)
+                {
+                    Toast.makeText(SendDirectMessageActivity.this, "Error/n" + e2, Toast.LENGTH_SHORT).show();
                 }
             }
         }
-        }
+    }
 
-        @Override
-    public void onActivityResult(int i, int i2, Intent intent) {
+    @Override
+    public void onActivityResult(int i, int i2, Intent intent)
+    {
         super.onActivityResult(i, i2, intent);
-        if (i2 != -1) {
+        if (i2 != -1)
+        {
             return;
         }
-        if (i == 1 && intent != null) {
+        if (i == 1 && intent != null)
+        {
             Uri data = intent.getData();
-            thisb.txtNoImage.setVisibility(View.GONE);
-            thisb.imgSetImage.setVisibility(View.VISIBLE);
-            thisb.imgSetImage.setImageURI(data);
+            myThis.txtNoImage.setVisibility(View.GONE);
+            myThis.imgSetImage.setVisibility(View.VISIBLE);
+            myThis.imgSetImage.setImageURI(data);
             shareUri = data;
-        } else if (i == 1000) {
-            thisb.txtNoImage.setVisibility(View.GONE);
-            thisb.imgSetImage.setVisibility(View.VISIBLE);
-            thisb.imgSetImage.setImageURI(photoURI);
+        }
+        else if (i == 1000)
+        {
+            myThis.txtNoImage.setVisibility(View.GONE);
+            myThis.imgSetImage.setVisibility(View.VISIBLE);
+            myThis.imgSetImage.setImageURI(photoURI);
             shareUri = photoURI;
         }
     }
 
-    private void chooseImage(Context context) {
-        if (Build.VERSION.SDK_INT < 23) {
+    private void chooseImage(Context context)
+    {
+        if (Build.VERSION.SDK_INT < 23)
+        {
             return;
         }
-        if (ContextCompat.checkSelfPermission(this, "android.permission.CAMERA") == 0 && ContextCompat.checkSelfPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE") == 0 && ContextCompat.checkSelfPermission(this, "android.permission.READ_EXTERNAL_STORAGE") == 0) {
+        if (ContextCompat.checkSelfPermission(this, "android.permission.CAMERA") == 0 && ContextCompat.checkSelfPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE") == 0 && ContextCompat.checkSelfPermission(this, "android.permission.READ_EXTERNAL_STORAGE") == 0)
+        {
             final Dialog dialog = new Dialog(context);
             dialog.setContentView(R.layout.choose_image_layout);
-            ((LinearLayout) dialog.findViewById(R.id.layourGallery)).setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
+            ((LinearLayout) dialog.findViewById(R.id.layourGallery)).setOnClickListener(new View.OnClickListener()
+            {
+                public void onClick(View view)
+                {
                     Intent intent = new Intent("android.intent.action.PICK", MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
                     startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
                     dialog.dismiss();
                 }
             });
-            ((LinearLayout) dialog.findViewById(R.id.layoutCamera)).setOnClickListener(new View.OnClickListener() {
+            ((LinearLayout) dialog.findViewById(R.id.layoutCamera)).setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view)
+                {
                     Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                    if (intent.resolveActivity(context.getPackageManager()) != null) {
+                    if (intent.resolveActivity(context.getPackageManager()) != null)
+                    {
                         File file2 = null;
-                        try {
+                        try
+                        {
                             file2 = createImageFile();
-                        } catch (IOException e) {
+                        }
+                        catch (IOException e)
+                        {
                             e.getMessage();
                             Log.e("Dir Error", e.getMessage());
                         }
-                        if (file2 != null) {
+                        if (file2 != null)
+                        {
                             Uri uriForFile = FileProvider.getUriForFile(context, "com.akweb.whatsautoreplybuzz.provider", file2);
                             photoURI = uriForFile;
                             intent.putExtra("output", uriForFile);
@@ -199,11 +233,11 @@ public class SendDirectMessageActivity extends AppCompatActivity implements View
     }
 
 
-
-    private File createImageFile() throws IOException {
+    private File createImageFile() throws IOException
+    {
         String format = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File createTempFile = File.createTempFile(getResources().getString(R.string.app_name) + format + "_", ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES));
-        currentPhotoPath = createTempFile.getAbsolutePath();
+        String currentPhotoPath = createTempFile.getAbsolutePath();
         return createTempFile;
     }
 
@@ -237,53 +271,60 @@ public class SendDirectMessageActivity extends AppCompatActivity implements View
 
 
     @Override
-    public void onDestroy() {
+    public void onDestroy()
+    {
         super.onDestroy();
     }
 
-    public class PhoneNumberAdapter extends RecyclerView.Adapter<PhoneNumberAdapter.ViewHolder> {
-        private Context context;
-        private List<PhoneNumberModel> listItem;
+    public class PhoneNumberAdapter extends RecyclerView.Adapter<PhoneNumberAdapter.ViewHolder>
+    {
+        private final List<PhoneNumberModel> listItem;
 
-        public PhoneNumberAdapter(Context context2, List<PhoneNumberModel> list) {
-            context = context2;
+        public PhoneNumberAdapter(Context context2, List<PhoneNumberModel> list)
+        {
             listItem = list;
         }
 
+        @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
+        {
             return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.phone_number_design_layout, viewGroup, false));
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder viewHolder, @SuppressLint("RecyclerView") int i) {
+        public void onBindViewHolder(ViewHolder viewHolder, @SuppressLint("RecyclerView") int i)
+        {
             viewHolder.txtNumber.setText(listItem.get(i).getNumber());
             viewHolder.txtTime.setText(Const.getTimeAgo(listItem.get(i).getTime()));
-            viewHolder.linearPhone.setOnClickListener(new View.OnClickListener() {
+            viewHolder.linearPhone.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
-                    thisb.edPhoneNumber.setText(listItem.get(i).getNumber());
+                public void onClick(View view)
+                {
+                    myThis.edPhoneNumber.setText(listItem.get(i).getNumber());
                 }
             });
         }
 
 
-
-
         @Override
-        public int getItemCount() {
+        public int getItemCount()
+        {
             return listItem.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            
+        public class ViewHolder extends RecyclerView.ViewHolder
+        {
+
             public LinearLayout linearPhone;
-            
+
             public TextView txtNumber;
-            
+
             public TextView txtTime;
 
-            public ViewHolder(View view) {
+            public ViewHolder(View view)
+            {
                 super(view);
                 txtNumber = (TextView) view.findViewById(R.id.txtPhoneNumber);
                 txtTime = (TextView) view.findViewById(R.id.txtPhoneTime);

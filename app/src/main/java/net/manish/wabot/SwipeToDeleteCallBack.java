@@ -9,54 +9,65 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class SwipeToDeleteCallBack extends ItemTouchHelper.Callback {
-    private int backgroundColor = Color.parseColor("#b80f0a");
-    private Drawable deleteDrawable;
-    private int intrinsicHeight;
-    private int intrinsicWidth;
-    private ColorDrawable mBackground = new ColorDrawable();
-    private Paint mClearPaint;
-    private Context mContext;
+import java.util.Objects;
+
+public class SwipeToDeleteCallBack extends ItemTouchHelper.Callback
+{
+    private final int backgroundColor = Color.parseColor("#b80f0a");
+    private final Drawable deleteDrawable;
+    private final int intrinsicHeight;
+    private final int intrinsicWidth;
+    private final ColorDrawable mBackground = new ColorDrawable();
+    private final Paint mClearPaint;
 
     @Override
-    public float getSwipeThreshold(RecyclerView.ViewHolder viewHolder) {
+    public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder)
+    {
         return 0.7f;
     }
 
     @Override
-    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder2) {
+    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder2)
+    {
         return false;
     }
 
     @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int i) {
+    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i)
+    {
     }
 
-    public SwipeToDeleteCallBack(Context context) {
-        mContext = context;
+    public SwipeToDeleteCallBack(Context context)
+    {
         mClearPaint = new Paint();
         mClearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         deleteDrawable = ContextCompat.getDrawable(context, R.drawable.ic_delete);
-        intrinsicWidth = deleteDrawable.getIntrinsicWidth();
+        intrinsicWidth = Objects.requireNonNull(deleteDrawable).getIntrinsicWidth();
         intrinsicHeight = deleteDrawable.getIntrinsicHeight();
     }
+
     @Override
-    public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+    public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder)
+    {
         return makeMovementFlags(0, 4);
     }
 
     @Override
-    public void onChildDraw(Canvas canvas, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float f, float f2, int i, boolean z) {
+    public void onChildDraw(@NonNull Canvas canvas, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float f, float f2, int i, boolean z)
+    {
         super.onChildDraw(canvas, recyclerView, viewHolder, f, f2, i, z);
         View view = viewHolder.itemView;
         int height = view.getHeight();
-        if (f == 0.0f && !z) {
-            clearCanvas(canvas, Float.valueOf(((float) view.getRight()) + f), Float.valueOf((float) view.getTop()), Float.valueOf((float) view.getRight()), Float.valueOf((float) view.getBottom()));
-            super.onChildDraw(canvas, recyclerView, viewHolder, f, f2, i, z);
+        if (f == 0.0f && !z)
+        {
+            clearCanvas(canvas, ((float) view.getRight()) + f, (float) view.getTop(), (float) view.getRight(), (float) view.getBottom());
+            super.onChildDraw(canvas, recyclerView, viewHolder, f, f2, i, false);
             return;
         }
         mBackground.setColor(backgroundColor);
@@ -70,8 +81,8 @@ public class SwipeToDeleteCallBack extends ItemTouchHelper.Callback {
     }
 
 
-
-    private void clearCanvas(Canvas canvas, Float f, Float f2, Float f3, Float f4) {
-        canvas.drawRect(f.floatValue(), f2.floatValue(), f3.floatValue(), f4.floatValue(), mClearPaint);
+    private void clearCanvas(Canvas canvas, Float f, Float f2, Float f3, Float f4)
+    {
+        canvas.drawRect(f, f2, f3, f4, mClearPaint);
     }
 }

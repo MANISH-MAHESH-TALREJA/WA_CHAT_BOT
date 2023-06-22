@@ -20,7 +20,7 @@
                 android:layout_marginTop="7dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/circle_background"
-                android:fontFamily="@font/outfit_bold"
+                android:fontFamily="@font/poppins_bold"
                 android:gravity="center"
                 android:text="H"
                 android:textColor="@color/actionBarColor"
@@ -42,12 +42,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_gravity="right"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/outfit_bold"
-                android:padding="18dp"
+                android:fontFamily="@font/poppins_bold"
+                android:padding="15dp"
                 android:text="Remove"
                 android:textColor="@color/text_red"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>

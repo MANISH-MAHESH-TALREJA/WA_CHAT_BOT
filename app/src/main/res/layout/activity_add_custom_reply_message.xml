@@ -88,7 +88,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_weight="1"
 
-                    android:fontFamily="@font/outfit_bold"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="Incoming message"
                     android:textColor="@color/headText"
                     android:textSize="16dp"
@@ -129,7 +129,7 @@
                     android:layout_marginTop="30dp"
                     android:layout_weight="1"
 
-                    android:fontFamily="@font/outfit_bold"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="Reply message"
                     android:textColor="@color/headText"
                     android:textSize="16dp"
