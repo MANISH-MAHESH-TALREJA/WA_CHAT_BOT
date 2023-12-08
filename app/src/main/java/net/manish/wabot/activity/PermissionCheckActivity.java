@@ -15,6 +15,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompatSideChannelService;
 import androidx.databinding.DataBindingUtil;
 import net.manish.wabot.R;
 import net.manish.wabot.SharedPreference;
@@ -23,7 +24,8 @@ import net.manish.wabot.databinding.ActivityPermissionCheckBinding;
 public class PermissionCheckActivity extends AppCompatActivity {
     public static final String storageManualAlertMsg = "We need your permissions to access the camera and storage. Please permit the permission through\nSettings screen.\n\nSelect Permissions -> Enable permission";
     private final int MULTIPLE_PERMISSIONS = 100;
-    String[] permissions = {"android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.READ_CONTACTS", "android.permission.CAMERA"};
+    String[] permissions_old = {"android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.READ_CONTACTS", "android.permission.CAMERA"};
+    String[] permissions_new = {"android.permission.POST_NOTIFICATIONS", "android.permission.READ_MEDIA_IMAGES", "android.permission.READ_MEDIA_AUDIO", "android.permission.READ_MEDIA_VIDEO", "android.permission.CAMERA", "android.permission.READ_CONTACTS"};
     ActivityPermissionCheckBinding myThis;
 
     
@@ -33,7 +35,15 @@ public class PermissionCheckActivity extends AppCompatActivity {
         myThis = (ActivityPermissionCheckBinding) DataBindingUtil.setContentView(this, R.layout.activity_permission_check);
         Context context = this;
         SharedPreference preference = new SharedPreference(this);
-        hasPermissions(context, permissions);
+        if (Build.VERSION.SDK_INT >= 33)
+        {
+            hasPermissions(context, permissions_new);
+        }
+        else
+        {
+            hasPermissions(context, permissions_old);
+        }
+        // hasPermissions(context, permissions);
     }
 
     public void isPermissionGranted(boolean z) {
@@ -74,29 +84,63 @@ public class PermissionCheckActivity extends AppCompatActivity {
     }
 
 
-    public boolean isStoragePermissionGranted(Activity activity, int i) {
-        if (Build.VERSION.SDK_INT < 23) {
+    public boolean isStoragePermissionGranted(Activity activity, int i)
+    {
+        if (Build.VERSION.SDK_INT > 23 && Build.VERSION.SDK_INT < 33)
+        {
+            if (activity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") == PackageManager.PERMISSION_GRANTED && activity.checkSelfPermission("android.permission.CAMERA") == PackageManager.PERMISSION_GRANTED && activity.checkSelfPermission("android.permission.READ_CONTACTS") == PackageManager.PERMISSION_GRANTED && activity.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == PackageManager.PERMISSION_GRANTED) {
+                Log.v("meaning", "Permission is granted");
+                return true;
+            } else if (neverAskAgainSelected(activity, "android.permission.WRITE_EXTERNAL_STORAGE")) {
+                displayNeverAskAgainDialog(activity, storageManualAlertMsg);
+                return false;
+            } else if (neverAskAgainSelected(activity, "android.permission.READ_EXTERNAL_STORAGE")) {
+                displayNeverAskAgainDialog(activity, storageManualAlertMsg);
+                return false;
+            } else if (neverAskAgainSelected(activity, "android.permission.CAMERA")) {
+                displayNeverAskAgainDialog(activity, storageManualAlertMsg);
+                return false;
+            } else if (neverAskAgainSelected(activity, "android.permission.READ_CONTACTS")) {
+                displayNeverAskAgainDialog(activity, storageManualAlertMsg);
+                return false;
+            } else {
+                ActivityCompat.requestPermissions(activity, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.CAMERA", "android.permission.READ_CONTACTS"}, i);
+                return false;
+            }
+        }
+        else if (Build.VERSION.SDK_INT >= 33)
+        {
+            if (activity.checkSelfPermission("android.permission.POST_NOTIFICATIONS") == PackageManager.PERMISSION_GRANTED && activity.checkSelfPermission("android.permission.CAMERA") == PackageManager.PERMISSION_GRANTED && activity.checkSelfPermission("android.permission.READ_CONTACTS") == PackageManager.PERMISSION_GRANTED && activity.checkSelfPermission("android.permission.READ_MEDIA_IMAGES") == PackageManager.PERMISSION_GRANTED && activity.checkSelfPermission("android.permission.READ_MEDIA_AUDIO") == PackageManager.PERMISSION_GRANTED && activity.checkSelfPermission("android.permission.READ_MEDIA_VIDEO") == PackageManager.PERMISSION_GRANTED) {
+                Log.v("meaning", "Permission is granted");
+                return true;
+            } else if (neverAskAgainSelected(activity, "android.permission.POST_NOTIFICATIONS")) {
+                displayNeverAskAgainDialog(activity, storageManualAlertMsg);
+                return false;
+            } else if (neverAskAgainSelected(activity, "android.permission.READ_MEDIA_IMAGES")) {
+                displayNeverAskAgainDialog(activity, storageManualAlertMsg);
+                return false;
+            } else if (neverAskAgainSelected(activity, "android.permission.READ_MEDIA_AUDIO")) {
+                displayNeverAskAgainDialog(activity, storageManualAlertMsg);
+                return false;
+            } else if (neverAskAgainSelected(activity, "android.permission.READ_MEDIA_VIDEO")) {
+                displayNeverAskAgainDialog(activity, storageManualAlertMsg);
+                return false;
+            } else if (neverAskAgainSelected(activity, "android.permission.CAMERA")) {
+                displayNeverAskAgainDialog(activity, storageManualAlertMsg);
+                return false;
+            } else if (neverAskAgainSelected(activity, "android.permission.READ_CONTACTS")) {
+                displayNeverAskAgainDialog(activity, storageManualAlertMsg);
+                return false;
+            } else {
+                ActivityCompat.requestPermissions(activity, new String[]{"android.permission.POST_NOTIFICATIONS", "android.permission.READ_MEDIA_IMAGES", "android.permission.READ_MEDIA_AUDIO", "android.permission.READ_MEDIA_VIDEO", "android.permission.CAMERA", "android.permission.READ_CONTACTS"}, i);
+                return false;
+            }
+        }
+        else
+        {
             return true;
         }
-        if (activity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") == PackageManager.PERMISSION_GRANTED && activity.checkSelfPermission("android.permission.CAMERA") == PackageManager.PERMISSION_GRANTED && activity.checkSelfPermission("android.permission.READ_CONTACTS") == PackageManager.PERMISSION_GRANTED && activity.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == PackageManager.PERMISSION_GRANTED) {
-            Log.v("meaning", "Permission is granted");
-            return true;
-        } else if (neverAskAgainSelected(activity, "android.permission.WRITE_EXTERNAL_STORAGE")) {
-            displayNeverAskAgainDialog(activity, storageManualAlertMsg);
-            return false;
-        } else if (neverAskAgainSelected(activity, "android.permission.READ_EXTERNAL_STORAGE")) {
-            displayNeverAskAgainDialog(activity, storageManualAlertMsg);
-            return false;
-        } else if (neverAskAgainSelected(activity, "android.permission.CAMERA")) {
-            displayNeverAskAgainDialog(activity, storageManualAlertMsg);
-            return false;
-        } else if (neverAskAgainSelected(activity, "android.permission.READ_CONTACTS")) {
-            displayNeverAskAgainDialog(activity, storageManualAlertMsg);
-            return false;
-        } else {
-            ActivityCompat.requestPermissions(activity, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.CAMERA", "android.permission.READ_CONTACTS"}, i);
-            return false;
-        }
+
     }
 
     public boolean neverAskAgainSelected(Activity activity, String str) {

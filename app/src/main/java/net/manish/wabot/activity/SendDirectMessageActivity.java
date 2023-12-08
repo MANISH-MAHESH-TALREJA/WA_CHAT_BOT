@@ -179,57 +179,107 @@ public class SendDirectMessageActivity extends AppCompatActivity implements View
 
     private void chooseImage(Context context)
     {
-        if (Build.VERSION.SDK_INT < 23)
+        if (Build.VERSION.SDK_INT > 23 && Build.VERSION.SDK_INT < 33)
         {
-            return;
-        }
-        if (ContextCompat.checkSelfPermission(this, "android.permission.CAMERA") == 0 && ContextCompat.checkSelfPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE") == 0 && ContextCompat.checkSelfPermission(this, "android.permission.READ_EXTERNAL_STORAGE") == 0)
-        {
-            final Dialog dialog = new Dialog(context);
-            dialog.setContentView(R.layout.choose_image_layout);
-            ((LinearLayout) dialog.findViewById(R.id.layourGallery)).setOnClickListener(new View.OnClickListener()
+            if (ContextCompat.checkSelfPermission(this, "android.permission.CAMERA") == 0 && ContextCompat.checkSelfPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE") == 0 && ContextCompat.checkSelfPermission(this, "android.permission.READ_EXTERNAL_STORAGE") == 0)
             {
-                public void onClick(View view)
+                final Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.choose_image_layout);
+                ((LinearLayout) dialog.findViewById(R.id.layourGallery)).setOnClickListener(new View.OnClickListener()
                 {
-                    Intent intent = new Intent("android.intent.action.PICK", MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent.setType("image/*");
-                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
-                    dialog.dismiss();
-                }
-            });
-            ((LinearLayout) dialog.findViewById(R.id.layoutCamera)).setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                    if (intent.resolveActivity(context.getPackageManager()) != null)
+                    public void onClick(View view)
                     {
-                        File file2 = null;
-                        try
+                        Intent intent = new Intent("android.intent.action.PICK", MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        intent.setType("image/*");
+                        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+                        dialog.dismiss();
+                    }
+                });
+                ((LinearLayout) dialog.findViewById(R.id.layoutCamera)).setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                        if (intent.resolveActivity(context.getPackageManager()) != null)
                         {
-                            file2 = createImageFile();
-                        }
-                        catch (IOException e)
-                        {
-                            e.getMessage();
-                            Log.e("Dir Error", e.getMessage());
-                        }
-                        if (file2 != null)
-                        {
-                            Uri uriForFile = FileProvider.getUriForFile(context, "com.akweb.whatsautoreplybuzz.provider", file2);
-                            photoURI = uriForFile;
-                            intent.putExtra("output", uriForFile);
-                            startActivityForResult(intent, 1000);
-                            dialog.dismiss();
+                            File file2 = null;
+                            try
+                            {
+                                file2 = createImageFile();
+                            }
+                            catch (IOException e)
+                            {
+                                e.getMessage();
+                                Log.e("Dir Error", e.getMessage());
+                            }
+                            if (file2 != null)
+                            {
+                                Uri uriForFile = FileProvider.getUriForFile(context, "com.akweb.whatsautoreplybuzz.provider", file2);
+                                photoURI = uriForFile;
+                                intent.putExtra("output", uriForFile);
+                                startActivityForResult(intent, 1000);
+                                dialog.dismiss();
+                            }
                         }
                     }
-                }
-            });
-            dialog.show();
-            return;
+                });
+                dialog.show();
+                return;
+            }
+            ActivityCompat.requestPermissions(this, new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.READ_EXTERNAL_STORAGE"}, 100);
         }
-        ActivityCompat.requestPermissions(this, new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.READ_EXTERNAL_STORAGE"}, 100);
+        else if (Build.VERSION.SDK_INT >= 33)
+        {
+            if (ContextCompat.checkSelfPermission(this, "android.permission.CAMERA") == 0 && ContextCompat.checkSelfPermission(this, "android.permission.POST_NOTIFICATIONS") == 0 && ContextCompat.checkSelfPermission(this, "android.permission.READ_MEDIA_AUDIO") == 0 && ContextCompat.checkSelfPermission(this, "android.permission.READ_MEDIA_VIDEO") == 0 && ContextCompat.checkSelfPermission(this, "android.permission.READ_MEDIA_IMAGES") == 0)
+            {
+                final Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.choose_image_layout);
+                ((LinearLayout) dialog.findViewById(R.id.layourGallery)).setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View view)
+                    {
+                        Intent intent = new Intent("android.intent.action.PICK", MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        intent.setType("image/*");
+                        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+                        dialog.dismiss();
+                    }
+                });
+                ((LinearLayout) dialog.findViewById(R.id.layoutCamera)).setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                        if (intent.resolveActivity(context.getPackageManager()) != null)
+                        {
+                            File file2 = null;
+                            try
+                            {
+                                file2 = createImageFile();
+                            }
+                            catch (IOException e)
+                            {
+                                e.getMessage();
+                                Log.e("Dir Error", e.getMessage());
+                            }
+                            if (file2 != null)
+                            {
+                                Uri uriForFile = FileProvider.getUriForFile(context, "net.manish.wabot.provider", file2);
+                                photoURI = uriForFile;
+                                intent.putExtra("output", uriForFile);
+                                startActivityForResult(intent, 1000);
+                                dialog.dismiss();
+                            }
+                        }
+                    }
+                });
+                dialog.show();
+                return;
+            }
+            ActivityCompat.requestPermissions(this, new String[]{"android.permission.CAMERA", "android.permission.POST_NOTIFICATIONS", "android.permission.READ_MEDIA_IMAGES", "android.permission.READ_MEDIA_AUDIO", "android.permission.READ_MEDIA_VIDEO"}, 100);
+        }
+
     }
 
 
