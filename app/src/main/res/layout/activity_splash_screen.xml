@@ -4,7 +4,7 @@
     android:gravity="center"
     style="@style/SmallHorizontalLinearLayout">
 
-    <!--<yanzhikai.textpath.SyncTextPathView
+    <yanzhikai.textpath.SyncTextPathView
         android:id="@+id/mainText"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
@@ -14,21 +14,8 @@
         app:showPainter="true"
         app:text="WHATSAPP CHAT BOT"
         app:textInCenter="true"
-        app:textSize="@dimen/_20sdp" />-->
+        app:textSize="@dimen/_20sdp" />
 
-    <!--<com.google.android.material.textview.MaterialTextView
-        android:id="@+id/mainText"
-        android:layout_width="@dimen/_275sdp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginHorizontal="@dimen/_5sdp"
-        android:layout_marginVertical="@dimen/_5sdp"
-        android:gravity="center_horizontal"
-        app:fontFamily="@font/poppins_medium"
-        android:text="@string/nav_title"
-        android:textColor="@color/text_next_welcome"
-        android:textSize="@dimen/_23sdp"
-        android:textStyle="bold" />-->
 
     <ImageView
         android:id="@+id/startImage"
@@ -40,7 +27,7 @@
         android:contentDescription="@string/app_name"
         app:srcCompat="@drawable/app_logo" />
 
-    <!--<yanzhikai.textpath.SyncTextPathView
+    <yanzhikai.textpath.SyncTextPathView
         android:id="@+id/fancy_text3"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
@@ -63,7 +50,7 @@
         app:showPainter="true"
         app:text="MANISH MAHESH TALREJA"
         app:textInCenter="true"
-        app:textSize="@dimen/_21sdp" />-->
+        app:textSize="@dimen/_21sdp" />
 
 
 </LinearLayout>

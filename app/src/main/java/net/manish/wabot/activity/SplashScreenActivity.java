@@ -13,7 +13,7 @@ import net.manish.wabot.R;
 import net.manish.wabot.SharedPreference;
 //import net.manish.wabot.databinding.ActivitySplashscreenBinding;
 
-// import yanzhikai.textpath.SyncTextPathView;
+import yanzhikai.textpath.SyncTextPathView;
 
 
 public class SplashScreenActivity extends AppCompatActivity
@@ -34,12 +34,12 @@ public class SplashScreenActivity extends AppCompatActivity
         //myThis = (ActivitySplashscreenBinding) DataBindingUtil.setContentView(this, R.layout.activity_splash_screen);
         context = this;
         preference = new SharedPreference(this);
-        /*SyncTextPathView syncTextPathView1 = findViewById(R.id.mainText);
+        SyncTextPathView syncTextPathView1 = findViewById(R.id.mainText);
         syncTextPathView1.startAnimation(0,1);
         SyncTextPathView syncTextPathView2 = findViewById(R.id.fancy_text3);
         syncTextPathView2.startAnimation(0,1);
         SyncTextPathView syncTextPathView3 = findViewById(R.id.fancy_text4);
-        syncTextPathView3.startAnimation(0,1);*/
+        syncTextPathView3.startAnimation(0,1);
         getActivity();
     }
 
