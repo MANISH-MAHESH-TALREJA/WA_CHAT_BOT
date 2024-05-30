@@ -16,18 +16,9 @@ public class AutoReply
         return this.ReceiveMsg;
     }
 
-    public void setReceiveMsg(String str)
-    {
-        this.ReceiveMsg = str;
-    }
-
     public String getSendMsg()
     {
         return this.SendMsg;
     }
 
-    public void setSendMsg(String str)
-    {
-        this.SendMsg = str;
-    }
 }

@@ -2,10 +2,10 @@ package net.manish.wabot.model;
 
 public class StatisticsReplyMsgListModel
 {
-    private String PersonName;
+    private final String PersonName;
     private int i;
-    private String replyMsg;
-    private long time;
+    private final String replyMsg;
+    private final long time;
 
     public StatisticsReplyMsgListModel(int i2, String str, String str2, long j)
     {
@@ -30,28 +30,15 @@ public class StatisticsReplyMsgListModel
         return this.replyMsg;
     }
 
-    public void setReplyMsg(String str)
-    {
-        this.replyMsg = str;
-    }
-
     public String getPersonName()
     {
         return this.PersonName;
     }
 
-    public void setPersonName(String str)
-    {
-        this.PersonName = str;
-    }
 
     public long getTime()
     {
         return this.time;
     }
 
-    public void setTime(long j)
-    {
-        this.time = j;
-    }
 }

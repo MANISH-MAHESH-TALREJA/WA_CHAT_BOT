@@ -2,7 +2,6 @@ package net.manish.wabot.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -26,6 +25,7 @@ public class PrivacyPolicyActivity extends AppCompatActivity
         preference = new SharedPreference(this);
         myThis.policyWebView.loadUrl("https://sites.google.com/view/wa-chat-bot");
         String stringExtra = getIntent().getStringExtra("Policy");
+        assert stringExtra != null;
         if (stringExtra.equals("Settings"))
         {
             myThis.btnAccept.setOnClickListener(view ->
@@ -36,6 +36,7 @@ public class PrivacyPolicyActivity extends AppCompatActivity
         }
         else if (!stringExtra.equals("Splash"))
         {
+            System.out.println("SPLASH");
         }
         else
         {

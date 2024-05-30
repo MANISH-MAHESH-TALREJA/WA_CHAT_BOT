@@ -47,7 +47,7 @@ public class RemoteInputParcel implements Parcelable
         resultKey = parcel.readString();
         choices = parcel.createStringArray();
         allowFreeFormInput = parcel.readByte() != 0 ? true : z;
-        extras = (Bundle) parcel.readParcelable(Bundle.class.getClassLoader());
+        extras = parcel.readParcelable(Bundle.class.getClassLoader());
     }
 
     public void charSequenceToStringArray(CharSequence[] charSequenceArr)

@@ -14,8 +14,6 @@ import java.util.Objects;
 public class NotificationUtils
 {
     private static final CharSequence INPUT_KEYWORD = "input";
-    /*private static final int MAX_OLD_NOTIFICATION_CAN_BE_REPLIED_TIME_MS = 30000;
-    private static final CharSequence REPLY_KEYWORD = "reply";*/
     private static final String[] REPLY_KEYWORDS = {"reply", "android.intent.extra.text"};
 
     public static Action getQuickReplyAction(Notification notification, String str)
@@ -93,7 +91,7 @@ public class NotificationUtils
         if (statusBarNotification.getNotification().extras.getBoolean(NotificationCompat.EXTRA_IS_GROUP_CONVERSATION))
         {
             String string = statusBarNotification.getNotification().extras.getString(NotificationCompat.EXTRA_HIDDEN_CONVERSATION_TITLE);
-            if (string == null && (indexOf = (string = statusBarNotification.getNotification().extras.getString(NotificationCompat.EXTRA_TITLE)).indexOf(58)) != -1)
+            if (string == null && (indexOf = (Objects.requireNonNull(string = statusBarNotification.getNotification().extras.getString(NotificationCompat.EXTRA_TITLE))).indexOf(58)) != -1)
             {
                 string = string.substring(0, indexOf);
             }

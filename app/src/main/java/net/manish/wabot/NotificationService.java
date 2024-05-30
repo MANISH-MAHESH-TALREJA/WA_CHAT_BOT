@@ -12,7 +12,6 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.text.SpannableString;
 import android.util.Log;
-//import android.widget.TextView;
 
 import androidx.core.app.NotificationCompat;
 
@@ -39,11 +38,8 @@ public class NotificationService extends NotificationListenerService
     private long count = 0;
     private List<String> getUserList;
     private String headerText;
-    //private final String noMatch = "";
     private SharedPreference preference;
     private int replyTime;
-    //private TextView text;
-
 
     @Override
     public void onListenerConnected()
@@ -121,7 +117,7 @@ public class NotificationService extends NotificationListenerService
             catch (Exception e)
             {
                 Const.staticsReplyList = new ArrayList();
-                Log.e("StaticsList", e.getMessage());
+                Log.e("StaticsList", Objects.requireNonNull(e.getMessage()));
             }
             String fromPref_String = preference.getFromPref_String("BoldHeaderText");
             if (fromPref_String.isEmpty())
@@ -194,7 +190,7 @@ public class NotificationService extends NotificationListenerService
                                     }
                                     catch (Exception e2)
                                     {
-                                        Log.e("ONCE", e2.getMessage());
+                                        Log.e("ONCE", Objects.requireNonNull(e2.getMessage()));
                                         getUserList = new ArrayList();
                                     }
                                     if (getUserList.contains(string))
@@ -259,7 +255,7 @@ public class NotificationService extends NotificationListenerService
                                     }
                                     catch (Exception e2)
                                     {
-                                        Log.e("ONCE", e2.getMessage());
+                                        Log.e("ONCE", Objects.requireNonNull(e2.getMessage()));
                                         getUserList = new ArrayList();
                                     }
                                     if (getUserList.contains(string))
@@ -308,7 +304,6 @@ public class NotificationService extends NotificationListenerService
         try
         {
             Log.e("RECEIVE MSG", str);
-            Const.replyList.isEmpty();
             boolean z2 = false;
             boolean isContain = preference.getFromPref_Boolean("contain");
             boolean isExtra = preference.getFromPref_Boolean("exact");
@@ -316,7 +311,6 @@ public class NotificationService extends NotificationListenerService
             boolean fromPref_Boolean = preference.getFromPref_Boolean("customAutoReplySwitch");
             Log.e("CustomReply", fromPref_Boolean + ":::");
             Iterator<AutoReply> it = Const.replyList.iterator();
-            //String sendMessage;
             while (true)
             {
                 if (!it.hasNext())
@@ -338,9 +332,7 @@ public class NotificationService extends NotificationListenerService
                         long j = count + 1;
                         count = j;
                         preference.addToPref_Long("Counter", j);
-                        //sendMessage = next.getSendMsg();
                         List<StatisticsReplyMsgListModel> list = Const.staticsReplyList;
-
                         StatisticsReplyMsgListModel statisticsReplyMsgListModel = new StatisticsReplyMsgListModel((int) count, next.getSendMsg(), str2, currentTimeMillis);
                         list.add(statisticsReplyMsgListModel);
                         preference.setReplyList("StaticsReplyList", Const.staticsReplyList);
@@ -368,7 +360,6 @@ public class NotificationService extends NotificationListenerService
                 long currentTimeMillis2 = System.currentTimeMillis();
                 action.sendReply(getApplicationContext(), autoReplyText);
                 stopService(new Intent(getApplicationContext(), getClass()));
-                //sendMessage = preference.getFromPref_String(str7);
                 long j2 = count + 1;
                 count = j2;
                 preference.addToPref_Long(str4, j2);
@@ -383,8 +374,7 @@ public class NotificationService extends NotificationListenerService
         }
         catch (PendingIntent.CanceledException e)
         {
-            e.printStackTrace();
-            Log.e("Replied Message Error", e.getMessage());
+            Log.e("Replied Message Error", Objects.requireNonNull(e.getMessage()));
         }
     }
 
@@ -410,7 +400,7 @@ public class NotificationService extends NotificationListenerService
 
     private boolean EveryOne(String str)
     {
-        return str.equals("Everyone") || str.equals("");
+        return str.equals("Everyone") || str.isEmpty();
     }
 
     private boolean ContactList(String str, String str2)
@@ -457,8 +447,7 @@ public class NotificationService extends NotificationListenerService
             }
             catch (ParseException e)
             {
-                e.printStackTrace();
-                Log.e("CURRENT TIME", e.getMessage());
+                Log.e("CURRENT TIME", Objects.requireNonNull(e.getMessage()));
             }
         }
         return true;

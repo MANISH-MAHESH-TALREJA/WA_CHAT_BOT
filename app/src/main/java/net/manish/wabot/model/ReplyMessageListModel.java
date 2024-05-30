@@ -2,10 +2,10 @@ package net.manish.wabot.model;
 
 public class ReplyMessageListModel
 {
-    private String date;
+    private final String date;
     private String name;
-    private String sameDate;
-    private String time;
+    private final String sameDate;
+    private final String time;
 
     public ReplyMessageListModel(String str, String str2, String str3, String str4)
     {
@@ -30,19 +30,9 @@ public class ReplyMessageListModel
         return this.time;
     }
 
-    public void setTime(String str)
-    {
-        this.time = str;
-    }
-
     public String getDate()
     {
         return this.date;
-    }
-
-    public void setDate(String str)
-    {
-        this.date = str;
     }
 
     public String getSameDate()
@@ -50,8 +40,4 @@ public class ReplyMessageListModel
         return this.sameDate;
     }
 
-    public void setSameDate(String str)
-    {
-        this.sameDate = str;
-    }
 }

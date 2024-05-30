@@ -9,7 +9,6 @@ import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
 import android.view.Menu;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
@@ -17,14 +16,14 @@ import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
 
 import net.manish.wabot.R;
-import net.manish.wabot.SharedPreference;
 import net.manish.wabot.adapter.TabLayoutAdapter;
 import net.manish.wabot.databinding.ActivityMainBinding;
+
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity
 {
-    private final int MULTIPLE_PERMISSIONS = 100;
     public Context context;
     ActivityMainBinding activityMainBinding;
 
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(bundle);
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         context = this;
-        SharedPreference preference = new SharedPreference(this);
         final Menu menu = activityMainBinding.bottomNavigationView.getMenu();
         for (int i = 0; i < menu.size(); i++)
         {
@@ -43,34 +41,11 @@ public class MainActivity extends AppCompatActivity
             menu.getItem(i).setTitle(spannableString);
         }
         setSupportActionBar(activityMainBinding.mainToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         tabLayout();
-        activityMainBinding.imgSendDirectMsg.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                startActivity(new Intent(MainActivity.this, SendDirectMessageActivity.class));
+        activityMainBinding.imgSendDirectMsg.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, SendDirectMessageActivity.class)));
 
-            }
-        });
-
-        activityMainBinding.menuWebview.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                startActivity(new Intent(MainActivity.this, WebActivity.class));
-            }
-        });
-        activityMainBinding.menuSettings.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-            }
-        });
+        activityMainBinding.menuSettings.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, SettingsActivity.class)));
     }
 
 
@@ -94,21 +69,19 @@ public class MainActivity extends AppCompatActivity
         activityMainBinding.mainViewPager.setAdapter(new TabLayoutAdapter(getSupportFragmentManager(), 4));
         activityMainBinding.bottomNavigationView.setOnNavigationItemSelectedListener(item ->
         {
-            switch (item.getItemId())
+            int itemId = item.getItemId();
+            if (itemId == R.id.menuHome)
             {
-                case R.id.menuHome:
-                    activityMainBinding.mainViewPager.setCurrentItem(0);
-                    break;
-                case R.id.menuCustom:
-                    activityMainBinding.mainViewPager.setCurrentItem(1);
-                    break;
-                case R.id.menuContacts:
-                    activityMainBinding.mainViewPager.setCurrentItem(2);
-                    break;
-                case R.id.menuStatistic:
-                    activityMainBinding.mainViewPager.setCurrentItem(3);
-                    break;
-
+                activityMainBinding.mainViewPager.setCurrentItem(0);
+            } else if (itemId == R.id.menuCustom)
+            {
+                activityMainBinding.mainViewPager.setCurrentItem(1);
+            } else if (itemId == R.id.menuContacts)
+            {
+                activityMainBinding.mainViewPager.setCurrentItem(2);
+            } else if (itemId == R.id.menuStatistic)
+            {
+                activityMainBinding.mainViewPager.setCurrentItem(3);
             }
             return true;
         });
@@ -182,19 +155,5 @@ public class MainActivity extends AppCompatActivity
             tp.setTypeface(typeface);
 
         }
-
-        /*private void setSelected(boolean selected)
-        {
-            if (selected)
-            {
-                color = R.color.actionBarColor;
-                size = 40;
-            }
-            else
-            {
-                color = R.color.disable_color;
-                size = 20;
-            }
-        }*/
     }
 }

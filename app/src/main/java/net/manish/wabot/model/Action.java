@@ -47,7 +47,7 @@ public class Action implements Parcelable
         remoteInputs = arrayList;
         text = parcel.readString();
         packageName = parcel.readString();
-        p = (PendingIntent) parcel.readParcelable(PendingIntent.class.getClassLoader());
+        p = parcel.readParcelable(PendingIntent.class.getClassLoader());
         isQuickReply = parcel.readByte() != 0;
         parcel.readTypedList(arrayList, RemoteInputParcel.CREATOR);
     }
@@ -59,17 +59,6 @@ public class Action implements Parcelable
         parcel.writeParcelable(p, i);
         parcel.writeByte(isQuickReply ? (byte) 1 : 0);
         parcel.writeTypedList(remoteInputs);
-    }
-
-    public Action(String str, String str2, PendingIntent pendingIntent, RemoteInput remoteInput, boolean z)
-    {
-        ArrayList<RemoteInputParcel> arrayList = new ArrayList<>();
-        remoteInputs = arrayList;
-        text = str;
-        packageName = str2;
-        p = pendingIntent;
-        isQuickReply = z;
-        arrayList.add(new RemoteInputParcel(remoteInput));
     }
 
     public Action(NotificationCompat.Action action, String str, boolean z)
@@ -112,32 +101,10 @@ public class Action implements Parcelable
         context.stopService(new Intent(context, NotificationService.class));
     }
 
-    public ArrayList<RemoteInputParcel> getRemoteInputs()
-    {
-        return remoteInputs;
-    }
-
-    public boolean isQuickReply()
-    {
-        return isQuickReply;
-    }
 
     public String getText()
     {
         return text;
     }
 
-    public PendingIntent getQuickReplyIntent()
-    {
-        if (isQuickReply)
-        {
-            return p;
-        }
-        return null;
-    }
-
-    public String getPackageName()
-    {
-        return packageName;
-    }
 }

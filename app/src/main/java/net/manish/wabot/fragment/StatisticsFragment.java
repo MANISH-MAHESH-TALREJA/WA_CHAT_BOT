@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+
 import net.manish.wabot.R;
 import net.manish.wabot.SharedPreference;
 import net.manish.wabot.activity.ReplyMessageListActivity;
@@ -23,8 +24,10 @@ import net.manish.wabot.utilities.Const;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class StatisticsFragment extends Fragment implements View.OnClickListener {
+public class StatisticsFragment extends Fragment implements View.OnClickListener
+{
     int count = 0;
 
     private SharedPreference preference;
@@ -32,63 +35,63 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     FragmentStatisticsBinding myThis;
 
     @Override
-    public void onCreate(Bundle bundle) {
+    public void onCreate(Bundle bundle)
+    {
         super.onCreate(bundle);
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+    public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle)
+    {
         FragmentStatisticsBinding inflate = FragmentStatisticsBinding.inflate(layoutInflater, viewGroup, false);
         myThis = inflate;
         return inflate.getRoot();
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle bundle) {
+    public void onViewCreated(@NonNull View view, Bundle bundle)
+    {
         super.onViewCreated(view, bundle);
-        preference = new SharedPreference(getActivity());
-        Const.staticsReplyList = new ArrayList();
-        staticList = new ArrayList();
-        List<StatisticsReplyMsgListModel> staticReplyList = new ArrayList();
-        List<String> messageList = new ArrayList();
-        //public UnifiedNativeAd nativeAd;
-        List<String> personList = new ArrayList();
+        preference = new SharedPreference(requireActivity());
+        Const.staticsReplyList = new ArrayList<>();
+        staticList = new ArrayList<>();
+        List<StatisticsReplyMsgListModel> staticReplyList;
+        List<String> messageList = new ArrayList<>();
+        List<String> personList = new ArrayList<>();
         long fromPref_Long = preference.getFromPref_Long("Counter");
         Log.e("Counter Value", fromPref_Long + ":::");
         myThis.txtCounter.setText(String.valueOf(fromPref_Long));
         myThis.imgReset.setOnClickListener(this);
-        //TMAdsUtils.initAd(getContext());
-        //TMAdsUtils.loadNativeAd(getContext(), myThis.myTemplate);
         staticReplyList = preference.getReplyList("StaticsReplyList");
-        /*if (isAdded()) {
-            new Handler().postDelayed(new Runnable() {
-                public void run() {
-                    nativeAds();
-                }
-            }, 1000);
-        }*/
         int i = 0;
-        if (staticReplyList ==null){
-            staticReplyList =new ArrayList<>();
+        if (staticReplyList == null)
+        {
+            staticReplyList = new ArrayList<>();
         }
-        while (i < staticReplyList.size()) {
-            try {
-                if (!messageList.contains(staticReplyList.get(i).getReplyMsg())) {
+        while (i < staticReplyList.size())
+        {
+            try
+            {
+                if (!messageList.contains(staticReplyList.get(i).getReplyMsg()))
+                {
                     messageList.add(staticReplyList.get(i).getReplyMsg());
                 }
                 i++;
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e("Statics MESSAGE LIST", e.getMessage());
-                staticReplyList = new ArrayList();
+            } catch (Exception e)
+            {
+                Log.e("Statics MESSAGE LIST", Objects.requireNonNull(e.getMessage()));
                 return;
             }
         }
-        for (int i2 = 0; i2 < messageList.size(); i2++) {
-            for (int i3 = 0; i3 < staticReplyList.size(); i3++) {
-                if (messageList.get(i2).equals(staticReplyList.get(i3).getReplyMsg())) {
+        for (int i2 = 0; i2 < messageList.size(); i2++)
+        {
+            for (int i3 = 0; i3 < staticReplyList.size(); i3++)
+            {
+                if (messageList.get(i2).equals(staticReplyList.get(i3).getReplyMsg()))
+                {
                     count++;
-                    if (!personList.contains(staticReplyList.get(i3).getPersonName())) {
+                    if (!personList.contains(staticReplyList.get(i3).getPersonName()))
+                    {
                         personList.add(staticReplyList.get(i3).getPersonName());
                     }
                 }
@@ -100,13 +103,16 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onStart() {
+    public void onStart()
+    {
         super.onStart();
     }
 
     @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.imgReset) {
+    public void onClick(View view)
+    {
+        if (view.getId() == R.id.imgReset)
+        {
             myThis.txtCounter.setText("0");
             preference.addToPref_Long("Counter", 0);
         }
@@ -114,121 +120,97 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
-        try {
+        try
+        {
 
-            if (staticList != null) {
-                if (!staticList.isEmpty()) {
+            if (staticList != null)
+            {
+                if (!staticList.isEmpty())
+                {
                     myThis.txtMessgesEmpty.setVisibility(View.GONE);
                     myThis.staticRecycleview.setVisibility(View.VISIBLE);
                     myThis.staticRecycleview.setAdapter(new StatisticsReplyMsgListAdapter(getActivity(), staticList));
                     return;
                 }
             }
-            staticList = new ArrayList();
+            staticList = new ArrayList<>();
             myThis.txtMessgesEmpty.setVisibility(View.VISIBLE);
             myThis.staticRecycleview.setVisibility(View.GONE);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("STATICS LIST", e.getMessage());
-            staticList = new ArrayList();
+        } catch (Exception e)
+        {
+            Log.e("STATICS LIST", Objects.requireNonNull(e.getMessage()));
+            staticList = new ArrayList<>();
         }
     }
 
-    
-    /*public void nativeAds() {
-        MobileAds.initialize((Context) getActivity(), (OnInitializationCompleteListener) new OnInitializationCompleteListener() {
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-                Log.e("Adssss", initializationStatus.toString());
-            }
-        });
-        AdLoader.Builder builder = new AdLoader.Builder((Context) getActivity(), getResources().getString(R.string.admob_native_ad));
-        builder.forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
-            @Override
-            public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
-                if (nativeAd != null) {
-                    nativeAd.destroy();
-                }
 
-            }
-        });
-        builder.withAdListener(new AdListener() {
-          @Override
-            public void onAdFailedToLoad(LoadAdError loadAdError) {
-                super.onAdFailedToLoad(loadAdError);
-
-                Log.e("Native Ad Failed", loadAdError + ":::");
-            }
-        }).build().loadAd(new AdRequest.Builder().build());
-    }*/
-
-    
-
-@Override
-    public void onDestroyView() {
-        /*UnifiedNativeAd unifiedNativeAd = nativeAd;
-        if (unifiedNativeAd != null) {
-            unifiedNativeAd.destroy();
-            Log.e("Native ad", "Destroy in statistic");
-        }*/
+    @Override
+    public void onDestroyView()
+    {
         super.onDestroyView();
     }
 
-    public class StatisticsReplyMsgListAdapter extends RecyclerView.Adapter<StatisticsReplyMsgListAdapter.ViewHolder> {
+    public static class StatisticsReplyMsgListAdapter extends RecyclerView.Adapter<StatisticsReplyMsgListAdapter.ViewHolder>
+    {
         private final Context context;
         private final List<StatisticsReplyMsgListModel> listItem;
 
-        public StatisticsReplyMsgListAdapter(Context context2, List<StatisticsReplyMsgListModel> list) {
+        public StatisticsReplyMsgListAdapter(Context context2, List<StatisticsReplyMsgListModel> list)
+        {
             context = context2;
             listItem = list;
         }
 
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
+        {
             return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.statistics_reply_messages_list_design_layout, viewGroup, false));
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder viewHolder, @SuppressLint("RecyclerView") int i) {
+        public void onBindViewHolder(ViewHolder viewHolder, @SuppressLint("RecyclerView") int i)
+        {
             viewHolder.txtMessage.setText(listItem.get(i).getReplyMsg());
             viewHolder.txtMsgCount.setText(String.format("%02d", listItem.get(i).getI()));
-            Log.e("message",listItem.get(i).getPersonName());
+            Log.e("message", listItem.get(i).getPersonName());
             viewHolder.txtPersonCount.setText(String.format("%02d", Integer.parseInt(listItem.get(i).getPersonName())));
-            /*viewHolder.txtPersonCount.setText(listItem.get(i).getPersonName());*/
-            viewHolder.linearDetails.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, ReplyMessageListActivity.class);
-                    intent.putExtra("Message", listItem.get(i).getReplyMsg());
-                    context.startActivity(intent);
-                }
+            viewHolder.linearDetails.setOnClickListener(view ->
+            {
+                Intent intent = new Intent(context, ReplyMessageListActivity.class);
+                intent.putExtra("Message", listItem.get(i).getReplyMsg());
+                context.startActivity(intent);
             });
         }
 
 
         @Override
-        public int getItemCount() {
+        public int getItemCount()
+        {
             return listItem.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            
+        public static class ViewHolder extends RecyclerView.ViewHolder
+        {
+
             public LinearLayout linearDetails;
-            
+
             public TextView txtMessage;
-            
+
             public TextView txtMsgCount;
-            
+
             public TextView txtPersonCount;
 
-            public ViewHolder(View view) {
+            public ViewHolder(View view)
+            {
                 super(view);
-                txtMessage = (TextView) view.findViewById(R.id.txtSendMsg);
-                txtMsgCount = (TextView) view.findViewById(R.id.txtmsgCounter);
-                txtPersonCount = (TextView) view.findViewById(R.id.txtMsgperson);
-                linearDetails = (LinearLayout) view.findViewById(R.id.linearReplyDetail);
+                txtMessage = view.findViewById(R.id.txtSendMsg);
+                txtMsgCount = view.findViewById(R.id.txtmsgCounter);
+                txtPersonCount = view.findViewById(R.id.txtMsgperson);
+                linearDetails = view.findViewById(R.id.linearReplyDetail);
             }
         }
     }

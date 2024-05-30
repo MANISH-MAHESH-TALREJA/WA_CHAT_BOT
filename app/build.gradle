@@ -3,7 +3,7 @@ plugins {
 }
 android {
     compileSdk 34
-
+    namespace "net.manish.wabot"
     defaultConfig {
         applicationId "net.manish.wabot"
         minSdk 23
@@ -38,8 +38,8 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.work:work-runtime:2.9.0'
     testImplementation 'junit:junit:4.13.2'
@@ -48,7 +48,7 @@ dependencies {
     implementation 'io.michaelrocks:libphonenumber-android:8.12.52'
     // implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
     implementation 'com.hbb20:ccp:2.7.0'
-    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+    implementation 'com.intuit.sdp:sdp-android:1.1.1'
     implementation 'com.yanzhikai:TextPathView:0.2.1'
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
 }

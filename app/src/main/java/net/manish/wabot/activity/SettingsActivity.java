@@ -44,10 +44,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_ACTIVITIES);
 
             Log.e("VERSION", packageInfo.versionName);
-        }
-        catch (PackageManager.NameNotFoundException e)
+        } catch (PackageManager.NameNotFoundException e)
         {
-            e.printStackTrace();
+            e.getLocalizedMessage();
         }
     }
 
@@ -60,36 +59,39 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     public void onClick(View view)
     {
-        switch (view.getId())
+        int id = view.getId();
+        if (id == R.id.imgSettigsBack)
         {
-            case R.id.imgSettigsBack:
-                finish();
-                return;
-            case R.id.linearRateApp:
-                rateApp();
-                return;
-            case R.id.linearReplyHeader:
-                startActivity(new Intent(this, ReplyHeaderActivity.class));
-                return;
-            case R.id.linearReplyTime:
-                startActivity(new Intent(this, ReplyTimeActivity.class));
-                return;
-            case R.id.linearReplyRules:
-                startActivity(new Intent(this, ReplyRulesActivity.class));
-                return;
-            case R.id.linearShareApp:
-                Intent intent = new Intent("android.intent.action.SEND");
-                intent.setType("text/plain");
-                intent.putExtra("android.intent.extra.TEXT", "DOWNLOAD WA BOT -> A WHATSAPP AUTO REPLIER BOT FROM GOOGLE PLAY STORE : https://play.google.com/store/apps/details?id=" + getPackageName());
-                startActivity(Intent.createChooser(intent, "SHARE APP VIA"));
-                return;
-            case R.id.linearTermAndCondition:
-                Intent intent2 = new Intent(this, PrivacyPolicyActivity.class);
-                intent2.putExtra("Policy", "Settings");
-                startActivity(intent2);
-                return;
-            default:
-                return;
+            finish();
+        }
+        else if (id == R.id.linearRateApp)
+        {
+            rateApp();
+        }
+        else if (id == R.id.linearReplyHeader)
+        {
+            startActivity(new Intent(this, ReplyHeaderActivity.class));
+        }
+        else if (id == R.id.linearReplyTime)
+        {
+            startActivity(new Intent(this, ReplyTimeActivity.class));
+        }
+        else if (id == R.id.linearReplyRules)
+        {
+            startActivity(new Intent(this, ReplyRulesActivity.class));
+        }
+        else if (id == R.id.linearShareApp)
+        {
+            Intent intent = new Intent("android.intent.action.SEND");
+            intent.setType("text/plain");
+            intent.putExtra("android.intent.extra.TEXT", "DOWNLOAD WA BOT -> A WHATSAPP AUTO REPLIER BOT FROM GOOGLE PLAY STORE : https://play.google.com/store/apps/details?id=" + getPackageName());
+            startActivity(Intent.createChooser(intent, "SHARE APP VIA"));
+        }
+        else if (id == R.id.linearTermAndCondition)
+        {
+            Intent intent2 = new Intent(this, PrivacyPolicyActivity.class);
+            intent2.putExtra("Policy", "Settings");
+            startActivity(intent2);
         }
     }
 
@@ -98,8 +100,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         try
         {
             startActivity(rateFromUrl("market://details"));
-        }
-        catch (Exception unused)
+        } catch (Exception unused)
         {
             startActivity(rateFromUrl("https://play.google.com/store/apps/details?id=" + getPackageName()));
         }
@@ -108,7 +109,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     @SuppressLint("WrongConstant")
     private Intent rateFromUrl(String str)
     {
-        Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(String.format("%s?id=%s", new Object[]{str, getPackageName()})));
+        Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(String.format("%s?id=%s", str, getPackageName())));
 
         intent.addFlags(1208483840);
         return intent;

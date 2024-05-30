@@ -12,12 +12,12 @@ import androidx.databinding.DataBindingUtil;
 
 import net.manish.wabot.R;
 import net.manish.wabot.SharedPreference;
-import net.manish.wabot.adapter.AutoReplyAdapter;
 import net.manish.wabot.databinding.ActivityAddCustomReplyMessageBinding;
 import net.manish.wabot.model.AutoReply;
 import net.manish.wabot.utilities.Const;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class AddCustomReplyMessageActivity extends AppCompatActivity implements View.OnClickListener
 {
@@ -33,7 +33,7 @@ public class AddCustomReplyMessageActivity extends AppCompatActivity implements 
     {
         super.onCreate(bundle);
         myThis = DataBindingUtil.setContentView(this, R.layout.activity_add_custom_reply_message);
-        Const.replyList = new ArrayList();
+        Const.replyList = new ArrayList<>();
         preference = new SharedPreference(this);
         Const.replyList = preference.getList("MessageList");
         edValue = getIntent().getStringExtra("ActivityValue");
@@ -68,14 +68,14 @@ public class AddCustomReplyMessageActivity extends AppCompatActivity implements 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3)
             {
-                myThis.txtIncoming.setText(myThis.edIncomingMsg.getText().toString().trim());
+                myThis.txtIncoming.setText(Objects.requireNonNull(myThis.edIncomingMsg.getText()).toString().trim());
             }
 
 
             @Override
             public void afterTextChanged(Editable editable)
             {
-                if (myThis.edIncomingMsg.getText().toString().trim().isEmpty())
+                if (Objects.requireNonNull(myThis.edIncomingMsg.getText()).toString().trim().isEmpty())
                 {
                     myThis.txtIncoming.setText("Type incoming message below");
                 }
@@ -96,13 +96,13 @@ public class AddCustomReplyMessageActivity extends AppCompatActivity implements 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3)
             {
-                myThis.txtReply.setText(myThis.edReplyMsg.getText().toString().trim());
+                myThis.txtReply.setText(Objects.requireNonNull(myThis.edReplyMsg.getText()).toString().trim());
             }
 
             @Override
             public void afterTextChanged(Editable editable)
             {
-                if (myThis.edReplyMsg.getText().toString().trim().isEmpty())
+                if (Objects.requireNonNull(myThis.edReplyMsg.getText()).toString().trim().isEmpty())
                 {
                     myThis.txtReply.setText("Type your reply message");
                 }
@@ -124,14 +124,14 @@ public class AddCustomReplyMessageActivity extends AppCompatActivity implements 
             {
                 if (Const.replyList.isEmpty())
                 {
-                    Const.replyList = new ArrayList();
+                    Const.replyList = new ArrayList<>();
                 }
-                if (myThis.edIncomingMsg.getText().toString().trim().isEmpty())
+                if (Objects.requireNonNull(myThis.edIncomingMsg.getText()).toString().trim().isEmpty())
                 {
                     myThis.edIncomingMsg.requestFocus();
                     myThis.edIncomingMsg.setError("Please fill Incoming message");
                 }
-                else if (myThis.edReplyMsg.getText().toString().trim().isEmpty())
+                else if (Objects.requireNonNull(myThis.edReplyMsg.getText()).toString().trim().isEmpty())
                 {
                     myThis.edReplyMsg.requestFocus();
                     myThis.edReplyMsg.setError("Please fill Reply message");
@@ -159,10 +159,9 @@ public class AddCustomReplyMessageActivity extends AppCompatActivity implements 
                     }
                     if (Const.replyList == null || Const.replyList.isEmpty())
                     {
-                        Const.replyList = new ArrayList();
+                        Const.replyList = new ArrayList<>();
                     }
                     Const.replyList.add(new AutoReply(myThis.edIncomingMsg.getText().toString().trim(), myThis.edReplyMsg.getText().toString().trim()));
-                    AutoReplyAdapter autoReplyAdapter = new AutoReplyAdapter(this, Const.replyList);
 
                     Toast.makeText(this, "Message added successfully", Toast.LENGTH_SHORT).show();
                     preference.setList("MessageList", Const.replyList);
@@ -171,8 +170,8 @@ public class AddCustomReplyMessageActivity extends AppCompatActivity implements 
             }
             catch (Exception e)
             {
-                Log.e("ADD MSG", e.getMessage());
-                Const.replyList = new ArrayList();
+                Log.e("ADD MSG", Objects.requireNonNull(e.getMessage()));
+                Const.replyList = new ArrayList<>();
             }
         }
         else if (id == R.id.imgBack)

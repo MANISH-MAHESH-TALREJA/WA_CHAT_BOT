@@ -1,7 +1,6 @@
 package net.manish.wabot.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -11,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,7 +29,6 @@ public class GetContactActivity extends AppCompatActivity implements View.OnClic
 {
 
     public List<String> cntList;
-    private Cursor cursor;
 
     public SharedPreference preference;
 
@@ -46,10 +42,10 @@ public class GetContactActivity extends AppCompatActivity implements View.OnClic
     public void onCreate(Bundle bundle)
     {
         super.onCreate(bundle);
-        myThis = (ActivityGetContactBinding) DataBindingUtil.setContentView(this, R.layout.activity_get_contact);
+        myThis = DataBindingUtil.setContentView(this, R.layout.activity_get_contact);
         preference = new SharedPreference(this);
-        cntList = new ArrayList();
-        searchList = new ArrayList();
+        cntList = new ArrayList<>();
+        searchList = new ArrayList<>();
         getContactList();
         myThis.imgCntBack.setOnClickListener(this);
         myThis.imgCntSave.setOnClickListener(this);
@@ -59,56 +55,54 @@ public class GetContactActivity extends AppCompatActivity implements View.OnClic
 
     public void onClick(View view)
     {
-        switch (view.getId())
+        int id = view.getId();
+        if (id == R.id.imgCntBack || id == R.id.imgCntSave)
         {
-            case R.id.imgCntBack:
-            case R.id.imgCntSave:
-                finish();
-                return;
-            case R.id.imgCntClose:
-                myThis.edCntSearch.setText("");
-                myThis.imgCntClose.setVisibility(View.GONE);
-                getContactList();
-                return;
-            case R.id.imgCntSearch:
-                myThis.txtCntSearch.setVisibility(View.GONE);
-                myThis.imgCntSearch.setVisibility(View.GONE);
-                myThis.edCntSearch.setVisibility(View.VISIBLE);
-                myThis.edCntSearch.addTextChangedListener(new TextWatcher()
+            finish();
+        }
+        else if (id == R.id.imgCntClose)
+        {
+            myThis.edCntSearch.setText("");
+            myThis.imgCntClose.setVisibility(View.GONE);
+            getContactList();
+        }
+        else if (id == R.id.imgCntSearch)
+        {
+            myThis.txtCntSearch.setVisibility(View.GONE);
+            myThis.imgCntSearch.setVisibility(View.GONE);
+            myThis.edCntSearch.setVisibility(View.VISIBLE);
+            myThis.edCntSearch.addTextChangedListener(new TextWatcher()
+            {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3)
                 {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3)
-                    {
-                    }
+                }
 
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3)
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3)
+                {
+                    textLength = myThis.edCntSearch.getText().toString().length();
+                    cntList.clear();
+                    for (int i4 = 0; i4 < searchList.size(); i4++)
                     {
-                        textLength = myThis.edCntSearch.getText().toString().length();
-                        cntList.clear();
-                        for (int i4 = 0; i4 < searchList.size(); i4++)
+                        if (textLength <= searchList.get(i4).length() && searchList.get(i4).toLowerCase().contains(myThis.edCntSearch.getText().toString().toLowerCase().trim()))
                         {
-                            if (textLength <= ((String) searchList.get(i4)).length() && ((String) searchList.get(i4)).toLowerCase().contains(myThis.edCntSearch.getText().toString().toLowerCase().trim()))
-                            {
-                                cntList.add((String) searchList.get(i4));
-                            }
-                        }
-
-                        AppendList(cntList);
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable)
-                    {
-                        if (myThis.edCntSearch.getText().toString().length() > 0)
-                        {
-                            myThis.imgCntClose.setVisibility(View.VISIBLE);
+                            cntList.add(searchList.get(i4));
                         }
                     }
-                });
-                return;
-            default:
-                return;
+
+                    AppendList(cntList);
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable)
+                {
+                    if (!myThis.edCntSearch.getText().toString().isEmpty())
+                    {
+                        myThis.imgCntClose.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
         }
     }
 
@@ -116,18 +110,12 @@ public class GetContactActivity extends AppCompatActivity implements View.OnClic
     private void getContactList()
     {
 
-
-       /*  cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, (String[]) null, (String) null, (String[]) null, "display_name ASC");
-         cntList=new ArrayList<>();
-        while (cursor.moveToNext()) {
-
-        }
-        cursor.close();*/
-
         Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, "display_name ASC");
         String temp_name = "";
-        while (phones.moveToNext())
+        while (true)
         {
+            assert phones != null;
+            if (!phones.moveToNext()) break;
             String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             if (name.equals(temp_name))
                 continue;
@@ -135,25 +123,24 @@ public class GetContactActivity extends AppCompatActivity implements View.OnClic
             cntList.add(phones.getString(phones.getColumnIndex("display_name")));
             searchList.add(phones.getString(phones.getColumnIndex("display_name")));
 
-            //add name to your list or adapter here`enter code here`
         }
         phones.close();
-        myThis.getContactRecycleView.setAdapter(new GetContactAdapter(this, cntList));
+        myThis.getContactRecycleView.setAdapter(new GetContactAdapter(cntList));
     }
 
     public void AppendList(List<String> list)
     {
-        myThis.getContactRecycleView.setAdapter(new GetContactAdapter(this, list));
+        myThis.getContactRecycleView.setAdapter(new GetContactAdapter(list));
     }
 
     class GetContactAdapter extends RecyclerView.Adapter<GetContactAdapter.ViewHolder>
     {
 
-        public List<String> listitem;
+        public List<String> listItem;
 
-        public GetContactAdapter(Context context2, List<String> list)
+        public GetContactAdapter(List<String> list)
         {
-            listitem = list;
+            listItem = list;
         }
 
         @NonNull
@@ -166,32 +153,20 @@ public class GetContactActivity extends AppCompatActivity implements View.OnClic
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, @SuppressLint("RecyclerView") int i)
         {
-            viewHolder.txtContact.setText(listitem.get(i));
-            viewHolder.txtCntFName.setText(String.valueOf(listitem.get(i).charAt(0)));
-            if (Const.contactList.contains(listitem.get(i)))
+            viewHolder.txtContact.setText(listItem.get(i));
+            viewHolder.txtCntFName.setText(String.valueOf(listItem.get(i).charAt(0)));
+            viewHolder.chkContact.setChecked(Const.contactList.contains(listItem.get(i)));
+            viewHolder.chkContact.setOnCheckedChangeListener((compoundButton, b) ->
             {
-                viewHolder.chkContact.setChecked(true);
-            }
-            else
-            {
-                viewHolder.chkContact.setChecked(false);
-            }
-            viewHolder.chkContact.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-            {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b)
+                if (b)
                 {
-                    if (b)
-                    {
-                        Const.contactList.add((String) listitem.get(i));
-                        preference.setContactList("ContactList", Const.contactList);
-                        return;
-                    }
-                    else
-                    {
-                        Const.contactList.remove((String) listitem.get(i));
-                        preference.setContactList("ContactList", Const.contactList);
-                    }
+                    Const.contactList.add(listItem.get(i));
+                    preference.setContactList("ContactList", Const.contactList);
+                }
+                else
+                {
+                    Const.contactList.remove(listItem.get(i));
+                    preference.setContactList("ContactList", Const.contactList);
                 }
             });
         }
@@ -199,7 +174,7 @@ public class GetContactActivity extends AppCompatActivity implements View.OnClic
         @Override
         public int getItemCount()
         {
-            return listitem.size();
+            return listItem.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder
@@ -218,21 +193,7 @@ public class GetContactActivity extends AppCompatActivity implements View.OnClic
 
                 txtContact = view.findViewById(R.id.txtContact);
                 txtCntFName = view.findViewById(R.id.txtCntFname);
-                LinearLayout linearContacts = (LinearLayout) view.findViewById(R.id.linearContacts);
-             /*   linearContacts.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (!chkContact.isChecked()) {
-                            chkContact.setChecked(true);
-                            Const.contactList.add((String) listitem.get(getAdapterPosition()));
-                            preference.setContactList("ContactList", Const.contactList);
-                            return;
-                        }
-                        chkContact.setChecked(false);
-                        Const.contactList.remove((String) listitem.get(getAdapterPosition()));
-                        preference.setContactList("ContactList", Const.contactList);
-                    }
-                });*/
+
             }
         }
     }

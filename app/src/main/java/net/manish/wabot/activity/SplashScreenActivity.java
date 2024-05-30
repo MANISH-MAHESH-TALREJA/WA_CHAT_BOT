@@ -7,21 +7,16 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
 
 import net.manish.wabot.R;
 import net.manish.wabot.SharedPreference;
-//import net.manish.wabot.databinding.ActivitySplashscreenBinding;
 
 import yanzhikai.textpath.SyncTextPathView;
-
 
 public class SplashScreenActivity extends AppCompatActivity
 {
     public Context context;
     public SharedPreference preference;
-    //ActivitySplashscreenBinding myThis;
-
 
     @Override
     public void onCreate(Bundle bundle)
@@ -31,7 +26,6 @@ public class SplashScreenActivity extends AppCompatActivity
         getWindow().setFlags(1024, 1024);
         setContentView(R.layout.activity_splash_screen);
 
-        //myThis = (ActivitySplashscreenBinding) DataBindingUtil.setContentView(this, R.layout.activity_splash_screen);
         context = this;
         preference = new SharedPreference(this);
         SyncTextPathView syncTextPathView1 = findViewById(R.id.mainText);

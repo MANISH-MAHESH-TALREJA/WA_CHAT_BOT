@@ -2,13 +2,13 @@ package net.manish.wabot.model;
 
 public class PhoneNumberModel
 {
-    private String Number;
-    private long time;
+    private final String Number;
+    private final long time;
 
     public PhoneNumberModel(String str, Long l)
     {
         this.Number = str;
-        this.time = l.longValue();
+        this.time = l;
     }
 
     public String getNumber()
@@ -16,18 +16,9 @@ public class PhoneNumberModel
         return this.Number;
     }
 
-    public void setNumber(String str)
-    {
-        this.Number = str;
-    }
-
     public long getTime()
     {
         return this.time;
     }
 
-    public void setTime(long j)
-    {
-        this.time = j;
-    }
 }

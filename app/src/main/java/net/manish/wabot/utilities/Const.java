@@ -9,11 +9,6 @@ import java.util.List;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Const
 {
-    //private static final int DAY_MILLIS = 86400000;
-    //private static final int HOUR_MILLIS = 3600000;
-    //private static final int MINUTE_MILLIS = 60000;
-    //public static final int REQ_NOTIFICATION_LISTENER = 100;
-    //private static final int SECOND_MILLIS = 1000;
     public static List<String> autoText = new ArrayList();
     public static List<String> contactList = new ArrayList();
     public static List<AutoReply> replyList = new ArrayList();
